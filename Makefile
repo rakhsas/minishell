@@ -3,7 +3,8 @@ NAME = minishell
 CC = cc
 BLT = builtins
 PRC = parcing
-CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g3
+CFLAGS = -Wall -Wextra -Werror
+#-fsanitize=address -g3
 
 FILES = minishell.c  $(PRC)/handle_quotes.c $(PRC)/utils/utils0.c\
 		$(PRC)/utils/utils1.c $(PRC)/lexer.c $(PRC)/expanding.c\
@@ -25,6 +26,7 @@ $(NAME) : $(OBJCS)
 	@make -C get_next_line
 	@echo "\033[0;32mCompiling minishell..."
 	@$(CC)  $(OBJCS) -lreadline  $(CFLAGS) $(INCLUDES) -o $(NAME)
+	make clean
 	@echo "\n\x1b[34mDone !\033[0m"
 
 %.o:%.c

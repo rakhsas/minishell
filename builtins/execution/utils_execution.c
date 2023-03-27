@@ -6,7 +6,7 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 11:21:32 by rakhsas           #+#    #+#             */
-/*   Updated: 2023/03/26 12:49:56 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/26 17:49:32 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,12 @@ void	ft_next_exec(t_list *list, int *stdin)
 			if (list->infile == 1)
 				dup2(*stdin, STDIN_FILENO);
 			close(fd[0]);
-			if (list->next)
-				dup2(fd[1], 1);
-			else
+			if (list->outfile != 1)
+			{
 				dup2(list->outfile, 1);
+			}
+			else if (list->next)
+				dup2(fd[1], 1);
 			close(fd[1]);
 			if (!check_command(list->args[0]))
 				return ;
@@ -92,10 +94,14 @@ void	ft_next_exec(t_list *list, int *stdin)
 		close(fd[1]);
 		list = list->next;
 	}
-	close(fd[1]);
-	close(fd[0]);
+	// close(fd[1]);
+	// close(fd[0]);
+	close(0);
+	dup2(*stdin, 0);
+	// close(stdin);
 	while (wait(NULL) != -1)
-		;
+	{
+	}
 }
 
 void	ft_exec(t_list *list)
@@ -124,8 +130,5 @@ void	ft_exec(t_list *list)
 	else
 	{
 		ft_next_exec(list, &stdin);
-		close(0);
-		dup2(stdin, 0);
-		close(stdin);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 08:56:34 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/26 14:47:50 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/27 00:27:28 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,12 +190,14 @@ int	main(int ac, char **av, char **env)
 	while (1)
 	{
 		line = readline("\x1b[1m\x1b[33mminishell$ \033[0m");
+		if (!line)
+			break ;
 		if (!check_single_quotes(line))
 		{
 			printf("Syntax Error!\n");
 			dep.exit_status = ERROR;
-			free(line);
 			add_history(line);
+			free(line);
 			continue ;
 		}
 		add_history(line);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_builtins.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 13:52:44 by rakhsas           #+#    #+#             */
-/*   Updated: 2023/03/25 16:58:36 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/26 22:37:27 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,9 @@ void	ft_next_main_exec(int *x)
 {
 	if (*x == 0)
 	{
-		printf("minishell: %s", dep.content[0]);
-		printf(": command not found\n");
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(dep.content[0], 2);
+		ft_putstr_fd(": command not found\n", 2);
 		dep.exit_status = UNKNOWN_COMMAND;
 		exit(dep.exit_status);
 	}

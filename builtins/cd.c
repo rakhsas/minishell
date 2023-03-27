@@ -6,7 +6,7 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 11:34:21 by rakhsas           #+#    #+#             */
-/*   Updated: 2023/03/26 14:54:01 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/27 11:47:59 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,13 @@ void	update_pwd(char *path)
 	{
 		if (ft_strnstr(dep.env[i], "PWD=", ft_strlen("PWD=")))
 		{
+			free(dep.env[i]);
 			dep.env[i] = ft_strjoin("PWD=", path);
 			dep.pwd = path;
 		}
 		i++;
 	}
+	free(path);
 }
 
 void	update_old_pwd(void)
@@ -37,8 +39,8 @@ void	update_old_pwd(void)
 	{
 		if (ft_strnstr(dep.env[i], "OLDPWD", ft_strlen("OLDPWD")))
 		{
+			free(dep.env[i]);
 			dep.env[i] = ft_strjoin("OLDPWD=", dep.pwd);
-			printf("%s\n", dep.env[i]);
 			return ;
 		}
 		i++;
@@ -85,8 +87,11 @@ void	ft_cd(t_list *list)
 		dep.exit_status = 1;
 	}
 	update_old_pwd();
+	// free(path);
 	path = getcwd(NULL, 0);
-	dep.pwd = ft_strdup(getcwd(NULL, 0));
+	// free(dep.pwd);
+	// dep.pwd = ft_strdup(getcwd(NULL, 0));
 	if (path)
 		update_pwd(path);
+	system ("leaks minishell");
 }
