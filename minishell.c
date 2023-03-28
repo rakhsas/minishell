@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 08:56:34 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/28 01:31:53 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/28 17:41:49 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,25 +35,7 @@ void	ft(int c)
 	if (c == LIMITER)
 		printf("LIMITER ");
 }
-//lesks checked : done
-int	tokens(char *line, t_token **token)
-{
-	t_token	*tmp;
 
-	get_token(line, token);
-
-	tmp = *token;
-	while (tmp)
-	{
-		type_arg(tmp);
-		if(tmp->type == INFILE || tmp->type == OUTFILE)
-			tmp->val = ft_expand(dep.env, tmp->val);
-		tmp = tmp->next;
-	}
-	// if(!pipe_errors(token))
-	// 	return (0);
-	return(1);
-}
 //lesks checked : done
 void expand_list(char **env, t_list **list)
 {
@@ -67,47 +49,16 @@ void expand_list(char **env, t_list **list)
 			tmp->cmd = ft_expand(env, tmp->cmd);
 		if(tmp->args)
 		{
+			
 			while(tmp->args[++i])
+			{
 				tmp->args[i] = ft_expand(env, tmp->args[i]);
+				if(!check_command(tmp->args[i]))
+					tmp->infile = -1;
+			}
+				
 		}
 		i = -1;
-		tmp = tmp->next;
-	}
-}
-
-void ft_free_token(t_token **list)
-{
-	t_token *tmp;
-
-	while(*list)
-	{
-		tmp = *list;
-		*list = (*list)->next;
-		free(tmp);
-	}
-}
-
-void ft_free_list(t_list *list)
-{
-	if(list->args[0])
-		free(list->args[0]);
-	if(list->args)
-		free_double(list->args);
-	list = NULL;
-}
-
-void ft_ck(t_list **lst)
-{
-	t_list *tmp;
-	 tmp = *lst;
-	while(tmp)
-	{
-		printf("%d", tmp->infile);
-		if(tmp->infile == -1)
-		{
-			printf("error");
-			return;
-		}
 		tmp = tmp->next;
 	}
 }
@@ -115,28 +66,14 @@ void ft_ck(t_list **lst)
 
 void	ft_next(char *line, t_token *data, t_list *list)
 {
-	if(!tokens(line, &data))
+	if(tokens(line, &data) == 258)
 		return;
-	// if(!check_oper(&data))
-	// {
-	// 	return;
-	// }
 	get_cmd(&list, &data);
 	expand_list(dep.env, &list);
 	if (list)
 		ft_exec(list);
 	free (line);
 	// system("leaks minishell");
-}
-
-void handle_signal1(int s)
-{
-	(void) s;
-}
-void handle_signal2(int s)
-{
-	(void) s;
-	exit(0);
 }
 
 char **ft_help_env(char **env)
@@ -192,24 +129,14 @@ int	main(int ac, char **av, char **env)
 		line = readline("\x1b[1m\x1b[33mminishell$ \033[0m");
 		if (!line)
 			break ;
-		// if (!check_single_quotes(line))
-		// {
-		// 	printf("Syntax Error!\n");
-		// 	dep.exit_status = ERROR;
-		// 	add_history(line);
-		// 	free(line);
-		// 	continue ;
-		// }
-		if (!check_cmd_syntax(line))
-        {
-			printf("reseted\n");
-            dep.exit_status = ERROR;
-            add_history(line);
-            free(line);
-            continue ;
-        }
+		if(!check_cmd_syntax(line))
+		{
+			dep.exit_status = SYNTAX_ERROR;
+			add_history(line);
+			free(line);
+			continue ;
+		}
 		add_history(line);
 		ft_next(line, data, list);
-		dep.exit_status = SUCCESS;
 	}
 }

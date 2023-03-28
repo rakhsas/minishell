@@ -3,32 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 19:52:16 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/28 01:34:20 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/28 17:10:38 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
-int is_std(char *val, t_list *list)
-{
-    if(!ft_strcmp("/dev/stdin", val) || !ft_strcmp("/dev/stdin/", val))
-        return (1);
-    if(!ft_strcmp("/dev/stdout", val) || !ft_strcmp("/dev/stdout/", val))
-    {
-        list->infile = 1;
-        return (1);
-    }
-
-    if(!ft_strcmp("/dev/stderr", val) || !ft_strcmp("/dev/stderr/", val))
-    {
-        list->infile = 2;
-        return (1);
-    }
-    return (0);
-}
 
 void get_infile(t_list *list, char *val)
 {

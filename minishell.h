@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 08:53:18 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/28 01:28:48 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/28 17:01:01 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,27 +105,21 @@ char 		*ft_join_free(char *s1, char *s2);
 void 		get_infile(t_list *list, char *val);
 void 		get_outfile(t_list *list, char *val, int type);
 int			quotes(char *line, int index);
+void 		ft_add_str(char *ln, t_token **token,char *p, int *i);
+void 		ft_add_opr(char *ln, t_token **token,char *p, int *i);
+int			ignore_sep(char c, char *line, int index);
+int 		is_std(char *val, t_list *list);
+void		get_token(char *line, t_token **token);
+int			tokens(char *line, t_token **token);
 
 /**** expanding ********/
-
 char 		*ft_get_arg(char **env, char *str, int *i);
 char 		*ft_expand(char **env, char *str);
-
-/*************************/
 /******* Builtins ********/
 void		echo(char **env, t_list *list);
 void		expaned_arg(char **env, char *arg);
 int			ft_exit(t_list *data);
-/*************************/
-void 		ft_add_str(char *ln, t_token **token,char *p, int *i);
-void 		ft_add_opr(char *ln, t_token **token,char *p, int *i);
-int			ignore_sep(char c, char *line, int index);
-/**********PIPE ERRORS**********************/
 
-// int 		pipe_errors(t_token **token);
-// int 		check_oper(t_token **token);
-// int  		ft_error_char(char *str);
-// int 		check_command(char *str);
 /***********HERE-DOC************/
 // int here_doc(char *limiter, char **env, t_file **f);
 char 	*here_doc(char *limiter, char **env);
@@ -157,6 +151,15 @@ int check_command(char *str);
 int check_token_syntax(t_token **token);
 int    check_quotes(char *str);
 int check_cmd_syntax(char *str);
+
+/************MAIN UTILS****************/
+
+void ft_free_token(t_token **list);
+void ft_free_list(t_list *list);
+void ft_ck(t_list **lst);
+void handle_signal1(int s);
+void handle_signal2(int s);
+
 t_dependences dep;
 # endif
 // echo 'dhfhygnfhgynf'

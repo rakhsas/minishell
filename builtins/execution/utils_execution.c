@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_execution.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 11:21:32 by rakhsas           #+#    #+#             */
-/*   Updated: 2023/03/28 13:20:27 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/28 23:35:53 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	ft_child_process(int pid, t_list *list, int *stdin, int *fd)
 		str_tolower(list->args[0]);
 		if (check_if_builtin(list) == 1)
 			main_execution(list);
-		exit(0);
+		exit(dep.exit_status);
 	}
 }
 
@@ -102,7 +102,7 @@ void	ft_loop(t_list *list, int *fd, int *stdin, int *pid)
 	if (pipe(fd) == -1)
 	{
 		perror("pipe");
-		dep.exit_status = 1;
+		dep.exit_status = ERROR;
 		exit(dep.exit_status);
 	}
 	*pid = fork();
@@ -140,7 +140,7 @@ void	ft_exec(t_list *list)
 	{
 		if (!list->args)
 		{
-			dep.exit_status = 0;
+			// dep.exit_status = 0;
 			return ;
 		}
 		str_tolower(list->args[0]);

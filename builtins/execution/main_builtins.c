@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_builtins.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 13:52:44 by rakhsas           #+#    #+#             */
-/*   Updated: 2023/03/28 12:37:04 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/28 23:35:17 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	ft_next_main_exec(int *x)
 		ft_putstr_fd(dep.content[0], 2);
 		ft_putstr_fd(": command not found\n", 2);
 		dep.exit_status = UNKNOWN_COMMAND;
+		fprintf(stderr, "%d\n", dep.exit_status);
 		exit(dep.exit_status);
 	}
 }
@@ -44,10 +45,14 @@ void	ft_main_execution(int i)
 				x++;
 				ft_putstr_fd(dep.content[0], 2);
 				ft_putstr_fd(": No such file or directory\n", 2);
-				exit(1);
+				dep.exit_status = ERROR;
+				exit(dep.exit_status);
 			}
 			if (execve(dep.staar[i], dep.content, dep.env_copy) == -1)
-				exit(1);
+			{
+				dep.exit_status = ERROR;
+				exit(dep.exit_status);
+			}
 		}
 	}
 	ft_next_main_exec(&x);
@@ -82,7 +87,7 @@ void	main_execution(t_list *list)
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(list->args[1], 2);
 		ft_putstr_fd(": No such file or directory\n", 2);
-		dep.exit_status = 127;
+		dep.exit_status = ERROR;
 		exit(dep.exit_status);
 	}
 	dep.staar = ft_split(dep.str + 5, ':');
