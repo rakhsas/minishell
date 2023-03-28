@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 08:53:18 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/25 16:51:38 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/28 01:28:48 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,10 +122,10 @@ void 		ft_add_opr(char *ln, t_token **token,char *p, int *i);
 int			ignore_sep(char c, char *line, int index);
 /**********PIPE ERRORS**********************/
 
-int 		pipe_errors(t_token **token);
-int 		check_oper(t_token **token);
-int  		ft_error_char(char *str);
-int 		check_command(char *str);
+// int 		pipe_errors(t_token **token);
+// int 		check_oper(t_token **token);
+// int  		ft_error_char(char *str);
+// int 		check_command(char *str);
 /***********HERE-DOC************/
 // int here_doc(char *limiter, char **env, t_file **f);
 char 	*here_doc(char *limiter, char **env);
@@ -147,6 +147,16 @@ void	ft_exec(t_list *list);
 char*	get_arg();
 void    main_execution(t_list *list);
 /************* Globale struct **************/
+/**SYNTAX ERROR**/
+int  is_error_char(char c);
+int pipe_errors(t_token **token);
+int is_opr(int type);
+int check_oper(t_token **token);
+int  ft_error_char(char *str);
+int check_command(char *str);
+int check_token_syntax(t_token **token);
+int    check_quotes(char *str);
+int check_cmd_syntax(char *str);
 t_dependences dep;
 # endif
 // echo 'dhfhygnfhgynf'

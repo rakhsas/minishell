@@ -6,7 +6,7 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 11:21:32 by rakhsas           #+#    #+#             */
-/*   Updated: 2023/03/27 14:32:50 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/28 13:20:27 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,72 +56,100 @@ char	*get_arg(void)
 	return (NULL);
 }
 
-void	ft_next_exec(t_list *list, int *stdin)
+void	ft_child_process(int pid, t_list *list, int *stdin, int *fd)
 {
-	int	fd[2]	;
-	*stdin = dup(0);
+	if (pid == 0)
+	{
+		if (list->infile == -1)
+		{
+			close(fd[0]);
+			close(fd[1]);
+			exit(1);
+		}
+		if (list->infile == 1)
+		{
+			dup2(*stdin, STDIN_FILENO);
+			close(*stdin);
+		}
+		close(fd[0]);
+		if (list->outfile != 1)
+		{
+			dup2(list->outfile, 1);
+		}
+		else if (list->next)
+		{
+			dup2(fd[1], 1);
+			close(fd[1]);
+		}
+		close(fd[1]);
+		str_tolower(list->args[0]);
+		if (check_if_builtin(list) == 1)
+			main_execution(list);
+		exit(0);
+	}
+}
+
+void	ft_loop(t_list *list, int *fd, int *stdin, int *pid)
+{
+
+	if (list->infile == -1)
+	{
+		close(fd[0]);
+		close(fd[1]);
+	}
+	if (list->infile != 0)
+		dup2(list->infile, 0);
+	if (pipe(fd) == -1)
+	{
+		perror("pipe");
+		dep.exit_status = 1;
+		exit(dep.exit_status);
+	}
+	*pid = fork();
+	ft_child_process(*pid, list, stdin, fd);
+	close(fd[1]);
+	dup2(fd[0], 0);
+	close(fd[0]);
+}
+
+void	ft_next_exec(t_list *list)
+{
+	int	stdin;
+	int	fd[2];
+	int pid;
+
+	stdin = dup(0);
 	while (list)
 	{
-		if (list->infile != 0)
-			dup2(list->infile, 0);
-		pipe(fd);
-		if (fork() == 0)
-		{
-			if (list->infile == -1)
-			{
-				close(fd[0]);
-				close(fd[1]);
-				exit(1);
-			}
-			if (list->infile == 1)
-				dup2(*stdin, STDIN_FILENO);
-			close(fd[0]);
-			if (list->outfile != 1)
-			{
-				dup2(list->outfile, 1);
-			}
-			else if (list->next)
-			{
-				dup2(fd[1], 1);
-				close(fd[1]);
-			}
-			close(fd[1]);
-			if (!check_command(list->args[0]))
-				return ;
-			str_tolower(list->args[0]);
-			if (check_if_builtin(list) == 1)
-				main_execution(list);
-			exit(0);
-		}
-		else
-		{
-			dup2(fd[0], 0);
-			close(fd[0]);
-			close(fd[1]);
-		}
+		ft_loop(list, fd, &stdin, &pid);
 		list = list->next;
 	}
+	// close(fd[0])
+	waitpid(pid, &dep.exit_status, 0);
+	dep.exit_status = WEXITSTATUS(dep.exit_status);
 	close(0);
-	dup2(*stdin, 0);
-	close(*stdin);
+	dup2(stdin, 0);
+	close(stdin);
 	while (wait(NULL) != -1)
-	{
-	}
+		;
 }
 
 void	ft_exec(t_list *list)
 {
-	int	stdin;
-
 	if (ft_listsize(list) == 1)
 	{
-		if (!check_command(list->args[0]))
+		if (!list->args)
+		{
+			dep.exit_status = 0;
 			return ;
+		}
 		str_tolower(list->args[0]);
 		if (check_if_builtin(list) == 1)
 		{
 			if (fork() == 0)
 			{
+				if (list->infile == -1 || list->outfile == -1)
+					exit(1);
 				if (list->outfile != 0)
 					dup2(list->outfile, 1);
 				if (list->infile != 0)
@@ -133,7 +161,5 @@ void	ft_exec(t_list *list)
 		}
 	}
 	else
-	{
-		ft_next_exec(list, &stdin);
-	}
+		ft_next_exec(list);
 }

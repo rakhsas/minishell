@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 09:09:51 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/25 16:46:51 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/27 17:12:50 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,6 @@ int pipe_errors(t_token **token)
     return (1);
 }
 
-int is_opr(int type)
-{
-    if(type == TRUNC || type == APPEND)
-        return (1);
-    if(type == INPUT || type == HERDOC)
-        return (1);
-    return(0);
-}
-
 int check_oper(t_token **token)
 {
     t_token *tmp;
@@ -58,31 +49,24 @@ int check_oper(t_token **token)
         if(is_opr(tmp->type) && tmp->next && is_opr(tmp->next->type))
         {
             printf("syntax error near unexpected token %s\n", tmp->next->val);
-            dep.exit_status = ERROR;
+            dep.exit_status = SYNTAX_ERROR;
             return (0);
         }
         if(is_opr(tmp->type) && !tmp->next)
         {    
              printf("syntax error near unexpected token 'newline'\n");
-             dep.exit_status = ERROR;
+             dep.exit_status = SYNTAX_ERROR;
             return (0);
         }
          if(is_opr(tmp->type) && tmp->next->type == PIPE)
         {    
              printf("syntax error near unexpected token %s\n", tmp->next->val);
-             dep.exit_status = ERROR;
+             dep.exit_status = SYNTAX_ERROR;
             return (0);
         }
         tmp = tmp->next;
     }
     return(1);
-}
-
-int  is_error_char(char c)
-{
-    if(c == '*' ||  c == ';' || c == '\\')
-        return (1);
-    return (0);
 }
 
 //we have to use this function befor do exoanting!!.
@@ -98,32 +82,33 @@ int  ft_error_char(char *str)
             || quotes(str, i) == 1))
         {
             printf("SYNTAX ERROR!\n");
-            dep.exit_status = ERROR;
+            dep.exit_status = SYNTAX_ERROR;
             return (0);
         }
         i++;
     }
     return (1);
 }
-
 //function closedir  automaticlly will free dr
-int check_command(char *str)
-{
-    DIR *dr;
-    if(str && str[0] == '/')
-    {
-        if(!str[1])
-            printf("bash: %s :is a directory\n", str);
-        else
-        {
-            dr = opendir(str + 1);
-            if(opendir(str + 1))
-                printf("bash: %s :is a directory\n", str);
-            if(dr)
-                closedir(dr);
-        }
-        dep.exit_status = ERROR;
-        return (0);
-    }
-    return (1);    
-}
+// int check_command(char *str)
+// {
+//     DIR *dr;
+//     if(str && str[0] == '/')
+//     {
+//         if(!str[1])
+//             printf("bash: %s :is a directory\n", str);
+//         else
+//         {
+//             dr = opendir(str + 1);
+//             if(opendir(str + 1))
+//                 printf("bash: %s :is a directory\n", str);
+//             else
+//                 printf("bash: %s: No such file or directory\n", str);
+//             if(dr)
+//                 closedir(dr);
+//         }
+//         dep.exit_status = IS_DIRECTORY;
+//         return (0);
+//     }
+//     return (1);    
+// }

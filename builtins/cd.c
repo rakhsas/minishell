@@ -6,7 +6,7 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 11:34:21 by rakhsas           #+#    #+#             */
-/*   Updated: 2023/03/27 11:47:59 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/27 23:16:39 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,5 +93,5 @@ void	ft_cd(t_list *list)
 	// dep.pwd = ft_strdup(getcwd(NULL, 0));
 	if (path)
 		update_pwd(path);
-	system ("leaks minishell");
+	// system ("leaks minishell");
 }

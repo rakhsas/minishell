@@ -6,7 +6,7 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 13:52:44 by rakhsas           #+#    #+#             */
-/*   Updated: 2023/03/26 22:37:27 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/28 12:37:04 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ void	ft_main_execution(int i)
 			if (dep.content[0][0] == '/')
 			{
 				x++;
-				printf("%s", dep.content[0]);
-				printf(": No such file or directory\n");
+				ft_putstr_fd(dep.content[0], 2);
+				ft_putstr_fd(": No such file or directory\n", 2);
 				exit(1);
 			}
 			if (execve(dep.staar[i], dep.content, dep.env_copy) == -1)
@@ -51,6 +51,14 @@ void	ft_main_execution(int i)
 		}
 	}
 	ft_next_main_exec(&x);
+}
+
+void	do_exec(t_list *list)
+{
+	if (access(list->args[0], X_OK) == 0)
+		execve(list->args[0], list->args, dep.env_copy);
+	if (access(list->args[1], X_OK) == 0)
+		execve(list->args[1], list->args + 1, dep.env_copy);
 }
 
 void	main_execution(t_list *list)
@@ -71,15 +79,13 @@ void	main_execution(t_list *list)
 	}
 	if (dep.str == NULL)
 	{
-		printf("minishell: %s", list->args[1]);
-		printf(": No such file or directory\n");
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(list->args[1], 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
 		dep.exit_status = 127;
 		exit(dep.exit_status);
 	}
 	dep.staar = ft_split(dep.str + 5, ':');
-	if (access(list->args[0], X_OK) == 0)
-		execve(list->args[0], list->args, dep.env_copy);
-	if (access(list->args[1], X_OK) == 0)
-		execve(list->args[1], list->args+1, dep.env_copy);
+	do_exec(list);
 	ft_main_execution(i);
 }
