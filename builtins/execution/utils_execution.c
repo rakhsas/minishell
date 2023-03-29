@@ -6,7 +6,7 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 11:21:32 by rakhsas           #+#    #+#             */
-/*   Updated: 2023/03/28 13:20:27 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/29 13:36:33 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ void	ft_child_process(int pid, t_list *list, int *stdin, int *fd)
 {
 	if (pid == 0)
 	{
+		// signal(SIGINT, SIG_DFL);
+		// signal(SIGQUIT, SIG_DFL);
 		if (list->infile == -1)
 		{
 			close(fd[0]);
@@ -85,7 +87,7 @@ void	ft_child_process(int pid, t_list *list, int *stdin, int *fd)
 		str_tolower(list->args[0]);
 		if (check_if_builtin(list) == 1)
 			main_execution(list);
-		exit(0);
+		exit(dep.exit_status);
 	}
 }
 
@@ -127,6 +129,7 @@ void	ft_next_exec(t_list *list)
 	// close(fd[0])
 	waitpid(pid, &dep.exit_status, 0);
 	dep.exit_status = WEXITSTATUS(dep.exit_status);
+	printf("%d\n", dep.exit_status);
 	close(0);
 	dup2(stdin, 0);
 	close(stdin);

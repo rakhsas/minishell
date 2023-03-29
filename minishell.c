@@ -6,7 +6,7 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 08:56:34 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/28 01:31:53 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/29 13:46:43 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,8 +131,13 @@ void	ft_next(char *line, t_token *data, t_list *list)
 
 void handle_signal1(int s)
 {
-	(void) s;
+	s = 0;
+	ft_putstr_fd("", 2);
+	rl_replace_line("\n", 1);
+	rl_on_new_line();
+	rl_redisplay();
 }
+
 void handle_signal2(int s)
 {
 	(void) s;
@@ -172,6 +177,7 @@ char **ft_help_env(char **env)
 	return (new_env);
 }
 
+
 int	main(int ac, char **av, char **env)
 {
 	t_token	*data;
@@ -185,31 +191,22 @@ int	main(int ac, char **av, char **env)
 	list = NULL;
 	(void)ac;
 	(void)av;
-	signal(SIGINT, handle_signal1);
-	signal(SIGKILL, handle_signal2);
+	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
+		signal(SIGINT, handle_signal1);
 		line = readline("\x1b[1m\x1b[33mminishell$ \033[0m");
 		if (!line)
 			break ;
-		// if (!check_single_quotes(line))
-		// {
-		// 	printf("Syntax Error!\n");
-		// 	dep.exit_status = ERROR;
-		// 	add_history(line);
-		// 	free(line);
-		// 	continue ;
-		// }
 		if (!check_cmd_syntax(line))
-        {
-			printf("reseted\n");
-            dep.exit_status = ERROR;
-            add_history(line);
-            free(line);
-            continue ;
-        }
+		{
+			dep.exit_status = ERROR;
+			add_history(line);
+			free(line);
+			continue ;
+		}
 		add_history(line);
 		ft_next(line, data, list);
-		dep.exit_status = SUCCESS;
+		// dep.exit_status = SUCCESS;
 	}
 }
