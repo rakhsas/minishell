@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 13:52:44 by rakhsas           #+#    #+#             */
-/*   Updated: 2023/03/28 23:35:17 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/29 02:19:16 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	ft_next_main_exec(int *x)
 		ft_putstr_fd(dep.content[0], 2);
 		ft_putstr_fd(": command not found\n", 2);
 		dep.exit_status = UNKNOWN_COMMAND;
-		fprintf(stderr, "%d\n", dep.exit_status);
 		exit(dep.exit_status);
 	}
 }

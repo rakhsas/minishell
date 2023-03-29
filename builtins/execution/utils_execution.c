@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 11:21:32 by rakhsas           #+#    #+#             */
-/*   Updated: 2023/03/28 23:35:53 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/29 02:32:02 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@ int	check_if_builtin(t_list *list)
 	if (!ft_strcmp(list->args[0], "echo"))
 		echo(dep.env, list);
 	else if (!ft_strcmp(list->args[0], "pwd"))
-		printf("%s\n", dep.pwd);
+		ft_putendl_fd(dep.pwd, list->outfile);
 	else if (!ft_strcmp(list->args[0], "exit"))
 		ft_exit(list);
 	else if (!ft_strcmp(list->args[0], "cd"))
 		ft_cd(list);
 	else if (!ft_strcmp(list->args[0], "env"))
-		ft_env();
+		ft_env(list->outfile);
 	else if (!ft_strcmp(list->args[0], "unset"))
 		ft_unset(list);
 	else if (!ft_strcmp(list->args[0], "export"))

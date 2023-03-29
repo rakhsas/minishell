@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 08:53:18 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/28 17:01:01 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/29 01:55:53 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ char 		*ft_get_arg(char **env, char *str, int *i);
 char 		*ft_expand(char **env, char *str);
 /******* Builtins ********/
 void		echo(char **env, t_list *list);
-void		expaned_arg(char **env, char *arg);
+// void		expaned_arg(char **env, char *arg);
 int			ft_exit(t_list *data);
 
 /***********HERE-DOC************/
@@ -131,7 +131,7 @@ int 		do_exp_inp(char *limiter);
 void 		open_her(t_token **token, char **env);
 int	ft_listsize(t_list *list);
 /************ EXECUTION ************/
-void	ft_env(void);
+void	ft_env(int inf);
 void	ft_unset(t_list *lst);
 void	ft_cd(t_list *list);
 char	*get_pwd(char *str);
@@ -160,6 +160,7 @@ void ft_ck(t_list **lst);
 void handle_signal1(int s);
 void handle_signal2(int s);
 
+void ft(int c);
 t_dependences dep;
 # endif
 // echo 'dhfhygnfhgynf'

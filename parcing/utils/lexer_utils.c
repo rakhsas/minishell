@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 19:52:16 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/28 17:10:38 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/29 14:13:33 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,10 @@ void ft_add_opr(char *ln, t_token **token, char *p, int *i)
         p = ft_charjoin(p, ln[*i]);
         if((ft_strcmp(p, "<") && ft_strcmp(p, ">")) || !ln[*i + 1])
         {
+        
             ft_lstadd_back(token, ft_lstnew(CMD, p));
             break;
-        }
+        } 
         if ((!ft_strcmp(p, "<") && ln[*i + 1] != '<')
             || (!ft_strcmp(p, ">") && ln[*i + 1] != '>'))
         {

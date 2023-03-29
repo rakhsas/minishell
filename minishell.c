@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 08:56:34 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/28 17:41:49 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/29 14:14:29 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,26 +49,46 @@ void expand_list(char **env, t_list **list)
 			tmp->cmd = ft_expand(env, tmp->cmd);
 		if(tmp->args)
 		{
-			
 			while(tmp->args[++i])
 			{
 				tmp->args[i] = ft_expand(env, tmp->args[i]);
 				if(!check_command(tmp->args[i]))
 					tmp->infile = -1;
 			}
-				
 		}
 		i = -1;
 		tmp = tmp->next;
 	}
 }
 
+void	ft_lstclear(t_token **token)
+{
+	t_token	*current;
+	t_token	*next;
+
+	if (!token)
+		return ;
+	current = *token;
+	while (current != NULL)
+	{
+		next = current->next;
+		free(current->val);
+		free(current);
+		current = next;
+	}
+	*token = NULL;
+}
 
 void	ft_next(char *line, t_token *data, t_list *list)
 {
 	if(tokens(line, &data) == 258)
+	{
+		//ft_lstclear(&data);
 		return;
+	}
 	get_cmd(&list, &data);
+	//ft_lstclear(&data);
+	
 	expand_list(dep.env, &list);
 	if (list)
 		ft_exec(list);

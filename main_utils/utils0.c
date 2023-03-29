@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 15:56:54 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/28 16:01:57 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/29 01:51:52 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,3 +58,9 @@ void handle_signal2(int s)
 	(void) s;
 	exit(0);
 }
+
+// ft_printf(char *str1, char *str2, int fd_in)
+// {
+// 	ft_putstr_fd(str1, fd_in);
+// 	ft_putstr_fd(str2, fd_in);
+// }

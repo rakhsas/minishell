@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 10:50:47 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/28 17:03:45 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/29 14:09:28 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,14 +81,13 @@ void	get_token(char *line, t_token **token)
 		p = ft_calloc(1, 1);
 		if (line[i] && !ignore_sep(line[i], line, i))
 			ft_add_str(line, token, p, &i);
-		else
-		{
-			if (line[i] && ignore_sep(line[i], line, i))
+		 if (line[i] && ignore_sep(line[i], line, i))
 				ft_add_opr(line, token, p, &i);
-		}
+		else 
+			free(p);
 	}
 }
-//lesks checked : done
+//stoped here
 int	tokens(char *line, t_token **token)
 {
 	t_token	*tmp;
@@ -107,6 +106,5 @@ int	tokens(char *line, t_token **token)
 		return(SYNTAX_ERROR);
 		dep.exit_status  = SYNTAX_ERROR;
 	}
-		
 	return(1);
 }
