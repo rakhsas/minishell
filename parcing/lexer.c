@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 10:50:47 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/30 17:47:18 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/30 21:20:07 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,34 @@
 
 //stoped here
 
+void get_list(t_token *tmp, t_list **tmp_list)
+{
+	if (tmp->type == ARG || tmp->type == CMD)
+		(*tmp_list)->args = ft_realloc((*tmp_list)->args, tmp->val);
+	else if (tmp->type == INFILE)
+		get_infile(*tmp_list, tmp->val);
+	else if (tmp->type == OUTFILE)
+		get_outfile(*tmp_list, tmp->val, OUTFILE);
+	else if (tmp->type == APPEND)
+		get_outfile(*tmp_list, tmp->next->val, APPOUT);
+	else if (tmp->type == HERDOC)
+		get_infile(*tmp_list, tmp->next->val);
+}
+
 void	get_cmd(t_list **list, t_token **token)
 {
 	t_token	*tmp;
 	t_list	*tmp_list;
-	t_list *tmp_copy;
 	
 	tmp = *token;
-	tmp_copy = (t_list *)malloc(sizeof(t_list));
-	list_init(tmp_copy);
+	tmp_list = (t_list *)malloc(sizeof(t_list));
+	list_init(tmp_list);
 	open_her(token, dep.env);
-	tmp_list = tmp_copy;
 	while (tmp)
 	{
 		type_arg(tmp);
 		if (tmp->type == ARG || tmp->type == CMD)
-			tmp_list->args = ft_realloc(tmp_list->args, tmp->val);
+		(tmp_list)->args = ft_realloc((tmp_list)->args, tmp->val);
 		else if (tmp->type == INFILE)
 			get_infile(tmp_list, tmp->val);
 		else if (tmp->type == OUTFILE)
@@ -38,10 +50,11 @@ void	get_cmd(t_list **list, t_token **token)
 			get_outfile(tmp_list, tmp->next->val, APPOUT);
 		else if (tmp->type == HERDOC)
 			get_infile(tmp_list, tmp->next->val);
-		if ((tmp->next && tmp->next->type == PIPE) || !tmp->next)
-			add_command(list, &tmp_list);
+			if ((tmp->next && tmp->next->type == PIPE) || !tmp->next)
+				add_command(list, &tmp_list);
 		tmp = tmp->next;
 	}
+	free(tmp_list);
 }
 
 void	 type_arg(t_token *token)

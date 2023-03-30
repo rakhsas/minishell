@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 09:46:24 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/30 05:24:31 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/30 21:48:56 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,14 @@ char *check_name()
 	char *p;
 
 	i = 0;
-	name = ft_strjoin("/tmp/herdoc_",ft_itoa(i));
+	p = ft_itoa(i);
+	name = ft_strjoin("/tmp/herdoc_", p);
+	free(p);
 	while(!access(name, F_OK))
 	{
 		free(name);
 		p = ft_itoa(i++);
+		printf("%p\n", p);
 		name = ft_strjoin("/tmp/herdoc_", p);
 		free(p);
 	}
@@ -72,6 +75,7 @@ void fill_file(int *fd, char *limiter, char **env)
             buffer = ft_herd_exp(env, buffer);
 		ft_putstr_fd(buffer, *fd);
 	}
+	free(buffer);
 	exit(0);
 }
 
@@ -85,7 +89,7 @@ char *here_doc(char *limiter, char **env)
 	
 	name = check_name();
 	fd = open(name, O_TRUNC | O_CREAT |  O_RDWR, 0777);
-	dep.files = ft_realloc(dep.files, name);
+	// dep.files = ft_realloc(dep.files, name);
 	pid = fork();
 	if (!pid)
 	{	
@@ -109,6 +113,7 @@ void open_her(t_token **token, char **env)
 		if (tmp->type == HERDOC)
 		{
 			name = here_doc(tmp->next->val, env);
+			free(tmp->next->val);
 			tmp->next->val = name;
 		}
 		tmp = tmp->next;
