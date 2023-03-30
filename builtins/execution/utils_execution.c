@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 11:21:32 by rakhsas           #+#    #+#             */
-/*   Updated: 2023/03/29 02:32:02 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/30 17:54:10 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	check_if_builtin(t_list *list)
 
 	i = 0;
 	if (!ft_strcmp(list->args[0], "echo"))
-		echo(dep.env, list);
+		echo(list);
 	else if (!ft_strcmp(list->args[0], "pwd"))
 		ft_putendl_fd(dep.pwd, list->outfile);
 	else if (!ft_strcmp(list->args[0], "exit"))

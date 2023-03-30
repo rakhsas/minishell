@@ -3,8 +3,7 @@ NAME = minishell
 CC = cc
 BLT = builtins
 PRC = parcing
-CFLAGS = -Wall -Wextra -Werror
-#-fsanitize=address -g3
+CFLAGS = -Wall -Wextra -Werror #-fsanitize=address -g3
 
 FILES = minishell.c  $(PRC)/handle_quotes.c $(PRC)/utils/utils0.c\
 		$(PRC)/utils/utils1.c $(PRC)/lexer.c $(PRC)/expanding.c\

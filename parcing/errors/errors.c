@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 09:09:51 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/28 23:30:58 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/30 17:50:55 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,18 +109,24 @@ int check_command(char *str)
     if(str && !is_dir(str))
     {
         if(!str[1])
+        {
+            dep.exit_status = IS_DIRECTORY;
             printf("bash: %s :is a directory\n", str);
+        }
         else
         {
             dr = opendir(str);
+            dep.exit_status = IS_DIRECTORY;
             if(opendir(str))
                 printf("bash: %s :is a directory\n", str);
             else
+            {
+                dep.exit_status = UNKNOWN_COMMAND;
                 printf("bash: %s: No such file or directory\n", str);
+            }
             if(dr)
                 closedir(dr);
         }
-        dep.exit_status = IS_DIRECTORY;
         return (0);
     }
     return (1);    

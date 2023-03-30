@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils1.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 19:50:15 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/25 14:05:33 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/30 05:58:35 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ char **ft_realloc(char **p, char *str)
 	rp[i] = ft_join_free(rp[i], str);
 	i++;
 	rp[i] = NULL;
+	free_double(p);
 	return(rp);
 }
 
