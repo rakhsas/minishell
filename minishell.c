@@ -6,7 +6,7 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 08:56:34 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/30 18:05:25 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/30 22:57:55 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,25 @@ void expand_list(char **env, t_list **list)
 		tmp = tmp->next;
 	}
 }
+void free_list(t_list *head){
+    t_list *current = head;
+    while (current != NULL) {
+        t_list *next = current->next;
+		if(current->cmd)
+       		 free(current->cmd);
+        int i = 0;
+		if(current->args)
+		{
+		while (current->args[i] != NULL) {
+            free(current->args[i]);
+            i++;
+        }
+		}
+        free(current->args);
+        free(current);
+        current = next;
+    }
+}
 
 void	ft_lstclear(t_token **token)
 {
@@ -90,13 +109,15 @@ void	ft_next(char *line, t_token *data, t_list *list)
 
 	}
 	get_cmd(&list, &data);
-	// while(1);
-	//system("leaks minishell");
+
+	// system("leaks minishell");
 	// exit(0);
 	ft_lstclear(&data);
 	expand_list(dep.env, &list);
+
 	if (list)
 		ft_exec(list);
+	free_list(list);
 	free (line);
 }
 
