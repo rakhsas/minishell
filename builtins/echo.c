@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 23:13:46 by rakhsas           #+#    #+#             */
-/*   Updated: 2023/03/30 01:43:05 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/30 23:47:55 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,18 +49,13 @@ void	check_args(t_list *list, int *i, int *n)
 		{
 			*n = 1;
 			if(!yy(targ, n))
-			{
-				free(targ);
 				break;
-			}
 		}
 		else
-		{
-			free(targ);
 			break ;
-		}
 		(*i)++;
 	}
+	free(targ);
 }
 
 void	echo(t_list *list)
@@ -70,7 +65,7 @@ void	echo(t_list *list)
 
 	i = 0;
 	n = 0;
-	
+
 	if (!list->args || list->perror == -1)
 	{
 		if (!list->args)

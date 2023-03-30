@@ -6,7 +6,7 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 11:21:32 by rakhsas           #+#    #+#             */
-/*   Updated: 2023/03/30 18:00:39 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/30 23:50:42 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,5 +164,4 @@ void	ft_exec(t_list *list)
 	}
 	else
 		ft_next_exec(list);
-
 }

@@ -6,7 +6,7 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 08:56:34 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/30 22:57:55 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/30 23:46:26 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,22 +39,23 @@ void	ft(int c)
 }
 
 //lesks checked : done
-void expand_list(char **env, t_list **list)
+void	expand_list(char **env, t_list **list)
 {
-	t_list *tmp;
-	int i;
+	t_list	*tmp;
+	int		i;
+
 	i = -1;
 	tmp = *list;
 	while(tmp)
 	{
-		if(tmp->cmd)
+		if (tmp->cmd)
 			tmp->cmd = ft_expand(env, tmp->cmd);
-		if(tmp->args)
+		if (tmp->args)
 		{
-			while(tmp->args[++i])
+			while (tmp->args[++i])
 			{
 				tmp->args[i] = ft_expand(env, tmp->args[i]);
-				if(!check_command(tmp->args[0]))
+				if (!check_command(tmp->args[0]))
 					tmp->infile = -1;
 			}
 		}
@@ -62,24 +63,32 @@ void expand_list(char **env, t_list **list)
 		tmp = tmp->next;
 	}
 }
-void free_list(t_list *head){
-    t_list *current = head;
-    while (current != NULL) {
-        t_list *next = current->next;
-		if(current->cmd)
-       		 free(current->cmd);
-        int i = 0;
-		if(current->args)
+
+void	free_list(t_list *head)
+{
+	t_list	*current;
+	t_list	*next;
+	int		i;
+
+	current = head;
+	while (current != NULL)
+	{
+		next = current->next;
+		if (current->cmd)
+			free(current->cmd);
+		i = 0;
+		if (current->args)
 		{
-		while (current->args[i] != NULL) {
-            free(current->args[i]);
-            i++;
-        }
+			while (current->args[i] != NULL)
+			{
+				free(current->args[i]);
+				i++;
+			}
 		}
-        free(current->args);
-        free(current);
-        current = next;
-    }
+		free(current->args);
+		free(current);
+		current = next;
+	}
 }
 
 void	ft_lstclear(t_token **token)
@@ -102,26 +111,21 @@ void	ft_lstclear(t_token **token)
 
 void	ft_next(char *line, t_token *data, t_list *list)
 {
-	if(tokens(line, &data) == 258)
+	if (tokens(line, &data) == 258)
 	{
 		ft_lstclear(&data);
 		return;
-
 	}
 	get_cmd(&list, &data);
-
-	// system("leaks minishell");
-	// exit(0);
 	ft_lstclear(&data);
 	expand_list(dep.env, &list);
-
 	if (list)
 		ft_exec(list);
 	free_list(list);
 	free (line);
 }
 
-char **ft_help_env(char **env, int n)
+char	**ft_help_env(char **env, int n)
 {
 	char	**new_env;
 	int	i;
@@ -192,7 +196,8 @@ int	main(int ac, char **av, char **env)
 	while (1)
 	{
 		signal(SIGINT, handle_signal1);
-		line = readline("\x1b[1m\x1b[33mminishell$ \033[0m");
+		// line = readline("\x1b[1m\x1b[33mminishell$ \033[0m");
+		line = readline("minishell$ ");
 		if (!line)
 			break ;
 		if (!check_cmd_syntax(line))

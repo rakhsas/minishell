@@ -6,7 +6,7 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 13:52:44 by rakhsas           #+#    #+#             */
-/*   Updated: 2023/03/30 17:47:36 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/30 23:53:50 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,8 @@ void	ft_main_execution(int i, t_list *list)
 
 void	do_exec(t_list *list)
 {
-	// if (access(list->args[0], X_OK) == 0)
-	// {
-		if(execve(list->args[0], list->args, dep.env_copy) == -1)
-		{
-			return ;
-		}
-	// }
-
+	if(execve(list->args[0], list->args, dep.env_copy) == -1)
+		return ;
 	if (access(list->args[1], X_OK) == 0)
 		execve(list->args[1], list->args + 1, dep.env_copy);
 }
@@ -97,5 +91,6 @@ void	main_execution(t_list *list)
 	}
 	dep.staar = ft_split(dep.str + 5, ':');
 	do_exec(list);
+	while (1);
 	ft_main_execution(i, list);
 }

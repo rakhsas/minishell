@@ -6,7 +6,7 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 08:53:18 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/30 18:05:56 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/30 23:11:38 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # include <fcntl.h>
 #include <dirent.h>
 #include <sys/stat.h>
-extern void    rl_replace_line(const char *, int);
+extern void	rl_replace_line(const char *, int);
 # define EMPTY 0
 # define CMD 1
 # define INFILE 3
