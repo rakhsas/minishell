@@ -6,26 +6,28 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 10:50:47 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/29 15:15:13 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/30 18:43:22 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+//stoped here
+
 void	get_cmd(t_list **list, t_token **token)
 {
 	t_token	*tmp;
 	t_list	*tmp_list;
+	t_list *tmp_copy;
 
 	tmp = *token;
-	tmp_list = (t_list *)malloc(sizeof(t_list));
-	list_init(tmp_list);
+	tmp_copy = (t_list *)malloc(sizeof(t_list));
+	list_init(tmp_copy);
 	open_her(token, dep.env);
+	tmp_list = tmp_copy;
 	while (tmp)
 	{
 		type_arg(tmp);
-		//  if (tmp->type == CMD)
-		//  	tmp_list->args[0] = tmp->val;
 		if (tmp->type == ARG || tmp->type == CMD)
 			tmp_list->args = ft_realloc(tmp_list->args, tmp->val);
 		else if (tmp->type == INFILE)
@@ -42,7 +44,7 @@ void	get_cmd(t_list **list, t_token **token)
 	}
 }
 
-void	type_arg(t_token *token)
+void	 type_arg(t_token *token)
 {
 	if (ft_strcmp(token->val, ">") == 0)
 		token->type = TRUNC;
@@ -72,17 +74,15 @@ void	type_arg(t_token *token)
 void	get_token(char *line, t_token **token)
 {
 	int		i;
-	char	*p;
 
 	*token = NULL;
 	i = -1;
 	while (line[++i])
 	{
-		p = ft_calloc(1, 1);
 		if (line[i] && !ignore_sep(line[i], line, i))
-			ft_add_str(line, token, p, &i);
-		 if (line[i] && ignore_sep(line[i], line, i))
-				ft_add_opr(line, token, p, &i);
+			ft_add_str(line, token, &i);
+		if (line[i] && ignore_sep(line[i], line, i))
+				ft_add_opr(line, token, &i);
 	}
 }
 //stoped here

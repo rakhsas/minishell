@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 09:46:24 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/25 16:52:13 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/30 05:24:31 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,16 @@ char  *exp_limiter(char *limiter)
 	p = ft_strdup("");
 	while(limiter[++i])
 	{
-		if(!quotes(limiter, i) )
+		if(!quotes(limiter, i))
 		{
 			if(limiter[i] != '\'' && limiter[i] != '\"')
 				p = ft_charjoin(p, limiter[i]);
 		}
-		else
+		else if((limiter[i] != '\'' && limiter[i] != '\"'))
+			p = ft_charjoin(p, limiter[i]);
+		else if((limiter[i] == '\'' && quotes(limiter, i) == 1))
+			p = ft_charjoin(p, limiter[i]);
+		else if((limiter[i] == '\"' && quotes(limiter, i) == 2))
 			p = ft_charjoin(p, limiter[i]);
 	}
 	return (p);
@@ -36,13 +40,16 @@ char *check_name()
 {
 	int i;
 	char *name;
+	char *p;
 
 	i = 0;
 	name = ft_strjoin("/tmp/herdoc_",ft_itoa(i));
 	while(!access(name, F_OK))
 	{
 		free(name);
-		name = ft_strjoin("/tmp/herdoc_",ft_itoa(i++));
+		p = ft_itoa(i++);
+		name = ft_strjoin("/tmp/herdoc_", p);
+		free(p);
 	}
 	return(name);
 }
@@ -50,13 +57,13 @@ char *check_name()
 void fill_file(int *fd, char *limiter, char **env)
 {
 	char *buffer;
-
+	
 	while(1 && *fd != -1)
 	{
-	
+		ft_putstr_fd("heredoc> ", 0);
 		buffer = get_next_line(0);
 		if(!ft_strncmp(buffer, exp_limiter(limiter), ft_strlen(buffer) - 1) 
-			&& ft_strlen(buffer) > 1)
+			&& ft_strlen(buffer) -1 == ft_strlen(exp_limiter(limiter)))
 		{
 			free(buffer);
 			exit(0) ;

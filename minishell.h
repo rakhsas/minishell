@@ -6,7 +6,7 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 08:53:18 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/30 17:45:54 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/30 18:05:56 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,8 +107,8 @@ char 		*ft_join_free(char *s1, char *s2);
 void 		get_infile(t_list *list, char *val);
 void 		get_outfile(t_list *list, char *val, int type);
 int			quotes(char *line, int index);
-void 		ft_add_str(char *ln, t_token **token,char *p, int *i);
-void 		ft_add_opr(char *ln, t_token **token,char *p, int *i);
+void 		ft_add_str(char *ln, t_token **token, int *i);
+void 		ft_add_opr(char *ln, t_token **token, int *i);
 int			ignore_sep(char c, char *line, int index);
 int 		is_std(char *val, t_list *list);
 void		get_token(char *line, t_token **token);
@@ -118,7 +118,7 @@ int			tokens(char *line, t_token **token);
 char 		*ft_get_arg(char **env, char *str, int *i);
 char 		*ft_expand(char **env, char *str);
 /******* Builtins ********/
-void		echo(char **env, t_list *list);
+void		echo(t_list *list);
 // void		expaned_arg(char **env, char *arg);
 int			ft_exit(t_list *data);
 

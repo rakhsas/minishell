@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 19:52:16 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/29 14:13:33 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/30 05:11:27 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,42 +52,59 @@ void add_command(t_list **list, t_list **new)
     list_init(*new);
 }
 
-void ft_add_str(char *ln, t_token **token,char *p, int *i)
+void ft_add_str(char *ln, t_token **token, int *i)
 {
-    while (ln[*i] && !ignore_sep(ln[*i], ln, *i))
+    char *p;
+
+    p = ft_strdup("");
+    if(ln[*i] && !ignore_sep(ln[*i], ln, *i))
     {
-        // while((ln[*i] == '\"' && (!quotes(ln, *i) || quotes(ln, *i) == 1))
-        //     || ((ln[*i] == '\'' && (!quotes(ln, *i) || quotes(ln, *i) == 2))))
-        //     (*i)++;
-        p = ft_charjoin(p, ln[*i]);
-        if((ln[*i + 1] && ignore_sep(ln[*i + 1], ln, *i)
-            && !quotes(ln, *i + 1)) || !ln[*i + 1]
-                || (ln[*i + 1] == ' ' && (!quotes(ln, *i + 1))))
+         while (ln[*i] && !ignore_sep(ln[*i], ln, *i))
         {
-            ft_lstadd_back(token, ft_lstnew(CMD, p));
-            break;
+            // while((ln[*i] == '\"' && (!quotes(ln, *i) || quotes(ln, *i) == 1))
+            //     || ((ln[*i] == '\'' && (!quotes(ln, *i) || quotes(ln, *i) == 2))))
+            //     (*i)++;
+            
+            p = ft_charjoin(p, ln[*i]);
+            if((ln[*i + 1] && ignore_sep(ln[*i + 1], ln, *i)
+                && !quotes(ln, *i + 1)) || !ln[*i + 1]
+                    || (ln[*i + 1] == ' ' && (!quotes(ln, *i + 1))))
+            {
+                ft_lstadd_back(token, ft_lstnew(CMD, p));
+                break;
+            }
+            (*i) ++;
         }
-        (*i) ++;
     }
+    else
+        free(p);
 }
 
-void ft_add_opr(char *ln, t_token **token, char *p, int *i)
+void ft_add_opr(char *ln, t_token **token, int *i)
 {
-    while (ln[*i] && ignore_sep(ln[*i], ln, *i) && ln[*i] != ' ')
+    char *p;
+
+    p = ft_strdup("");
+    if(ln[*i] && ignore_sep(ln[*i], ln, *i) && ln[*i] != ' ')
     {
-        p = ft_charjoin(p, ln[*i]);
-        if((ft_strcmp(p, "<") && ft_strcmp(p, ">")) || !ln[*i + 1])
+         while (ln[*i] && ignore_sep(ln[*i], ln, *i) && ln[*i] != ' ')
         {
+            p = ft_charjoin(p, ln[*i]);
         
-            ft_lstadd_back(token, ft_lstnew(CMD, p));
-            break;
-        } 
-        if ((!ft_strcmp(p, "<") && ln[*i + 1] != '<')
-            || (!ft_strcmp(p, ">") && ln[*i + 1] != '>'))
-        {
-            ft_lstadd_back(token, ft_lstnew(CMD, p));
-            break;
+            if((ft_strcmp(p, "<") && ft_strcmp(p, ">")) || !ln[*i + 1])
+            {
+                ft_lstadd_back(token, ft_lstnew(CMD, p));
+                break;
+            } 
+            if ((!ft_strcmp(p, "<") && ln[*i + 1] != '<')
+                || (!ft_strcmp(p, ">") && ln[*i + 1] != '>'))
+            {
+                ft_lstadd_back(token, ft_lstnew(CMD, p));
+                break;
+            }
+            (*i) ++;
         }
-        (*i) ++;
     }
+   else 
+    free(p);
 }

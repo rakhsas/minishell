@@ -6,7 +6,7 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 08:56:34 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/30 17:46:09 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/30 18:05:25 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,17 +85,19 @@ void	ft_next(char *line, t_token *data, t_list *list)
 {
 	if(tokens(line, &data) == 258)
 	{
-		//ft_lstclear(&data);
+		ft_lstclear(&data);
 		return;
+
 	}
 	get_cmd(&list, &data);
-	//ft_lstclear(&data);
-
+	// while(1);
+	//system("leaks minishell");
+	// exit(0);
+	ft_lstclear(&data);
 	expand_list(dep.env, &list);
 	if (list)
 		ft_exec(list);
 	free (line);
-	// system("leaks minishell");
 }
 
 char **ft_help_env(char **env, int n)

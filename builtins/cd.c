@@ -6,7 +6,7 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 11:34:21 by rakhsas           #+#    #+#             */
-/*   Updated: 2023/03/30 15:39:07 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/30 18:42:42 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ void	ft_cd(t_list *list)
 		ft_putendl_fd(": No such file or directory", 2);
 		dep.exit_status = ERROR;
 	}
+	printf("%p\n", list->args);
 	update_old_pwd();
 	// free(path);
 	path = getcwd(NULL, 0);
@@ -111,5 +112,9 @@ void	ft_cd(t_list *list)
 	// dep.pwd = ft_strdup(getcwd(NULL, 0));
 	if (path)
 		update_pwd(path);
-	while (1);
+	while (1)
+	{
+		usleep(2222*2222);
+		break ;
+	}
 }
