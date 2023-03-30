@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 09:09:51 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/27 17:12:50 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/29 17:50:44 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int pipe_errors(t_token **token)
 {
     t_token *tmp;
 
-    tmp = *token; 
+    tmp = *token;
     while(tmp)
     {
         if(tmp->type == PIPE)
@@ -25,7 +25,7 @@ int pipe_errors(t_token **token)
             {
                 printf("bash: syntax error near unexpected token '|'\n");
                 dep.exit_status = SYNTAX_ERROR;
-                return (0); 
+                return (0);
             }
             else if (tmp->next && tmp->next->type == PIPE)
             {
@@ -53,13 +53,13 @@ int check_oper(t_token **token)
             return (0);
         }
         if(is_opr(tmp->type) && !tmp->next)
-        {    
+        {
              printf("syntax error near unexpected token 'newline'\n");
              dep.exit_status = SYNTAX_ERROR;
             return (0);
         }
          if(is_opr(tmp->type) && tmp->next->type == PIPE)
-        {    
+        {
              printf("syntax error near unexpected token %s\n", tmp->next->val);
              dep.exit_status = SYNTAX_ERROR;
             return (0);
@@ -90,25 +90,38 @@ int  ft_error_char(char *str)
     return (1);
 }
 //function closedir  automaticlly will free dr
-// int check_command(char *str)
-// {
-//     DIR *dr;
-//     if(str && str[0] == '/')
-//     {
-//         if(!str[1])
-//             printf("bash: %s :is a directory\n", str);
-//         else
-//         {
-//             dr = opendir(str + 1);
-//             if(opendir(str + 1))
-//                 printf("bash: %s :is a directory\n", str);
-//             else
-//                 printf("bash: %s: No such file or directory\n", str);
-//             if(dr)
-//                 closedir(dr);
-//         }
-//         dep.exit_status = IS_DIRECTORY;
-//         return (0);
-//     }
-//     return (1);    
-// }
+int is_dir(char *str)
+{
+    int i;
+
+    i = 0;
+    while(str[i])
+    {
+        if(str[i] == '/')
+            return (0);
+        i++;
+    }
+    return(1);
+}
+int check_command(char *str)
+{
+    DIR *dr;
+    if(str && !is_dir(str))
+    {
+        if(!str[1])
+            printf("bash: %s :is a directory\n", str);
+        else
+        {
+            dr = opendir(str);
+            if(opendir(str))
+                printf("bash: %s :is a directory\n", str);
+            else
+                printf("bash: %s: No such file or directory\n", str);
+            if(dr)
+                closedir(dr);
+        }
+        dep.exit_status = IS_DIRECTORY;
+        return (0);
+    }
+    return (1);
+}

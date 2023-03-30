@@ -6,7 +6,7 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 14:59:13 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/13 00:02:22 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/30 01:31:40 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int					ft_isalnum(int c);
 int					ft_isascii(int c);
 int					ft_isprint(int c);
 size_t				ft_strlen(const char *s);
-int				    len(const char *s);
+int					len(const char *s);
 void				str_tolower(char *str);
 void				*ft_memset(void *s, int c, size_t len);
 void				ft_bzero(void *s, size_t n);
@@ -54,5 +54,6 @@ void				ft_putchar_fd(char c, int fd);
 void				ft_putstr_fd(char *s, int fd);
 void				ft_putnbr_fd(int n, int fd);
 void				ft_putendl_fd(char *s, int fd);
+int					ftsearch(char *haystack, char *needle, size_t len);
 
 #endif

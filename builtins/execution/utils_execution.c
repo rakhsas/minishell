@@ -6,7 +6,7 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 11:21:32 by rakhsas           #+#    #+#             */
-/*   Updated: 2023/03/29 13:36:33 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/30 14:00:12 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@ int	check_if_builtin(t_list *list)
 	if (!ft_strcmp(list->args[0], "echo"))
 		echo(dep.env, list);
 	else if (!ft_strcmp(list->args[0], "pwd"))
-		printf("%s\n", dep.pwd);
+		ft_putendl_fd(dep.pwd, list->outfile);
 	else if (!ft_strcmp(list->args[0], "exit"))
 		ft_exit(list);
 	else if (!ft_strcmp(list->args[0], "cd"))
 		ft_cd(list);
 	else if (!ft_strcmp(list->args[0], "env"))
-		ft_env();
+		ft_env(list->outfile);
 	else if (!ft_strcmp(list->args[0], "unset"))
 		ft_unset(list);
 	else if (!ft_strcmp(list->args[0], "export"))
@@ -104,7 +104,7 @@ void	ft_loop(t_list *list, int *fd, int *stdin, int *pid)
 	if (pipe(fd) == -1)
 	{
 		perror("pipe");
-		dep.exit_status = 1;
+		dep.exit_status = ERROR;
 		exit(dep.exit_status);
 	}
 	*pid = fork();
@@ -129,7 +129,6 @@ void	ft_next_exec(t_list *list)
 	// close(fd[0])
 	waitpid(pid, &dep.exit_status, 0);
 	dep.exit_status = WEXITSTATUS(dep.exit_status);
-	printf("%d\n", dep.exit_status);
 	close(0);
 	dup2(stdin, 0);
 	close(stdin);
@@ -143,7 +142,7 @@ void	ft_exec(t_list *list)
 	{
 		if (!list->args)
 		{
-			dep.exit_status = 0;
+			// dep.exit_status = 0;
 			return ;
 		}
 		str_tolower(list->args[0]);
@@ -165,4 +164,5 @@ void	ft_exec(t_list *list)
 	}
 	else
 		ft_next_exec(list);
+
 }

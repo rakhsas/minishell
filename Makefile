@@ -4,16 +4,17 @@ CC = cc
 BLT = builtins
 PRC = parcing
 CFLAGS = -Wall -Wextra -Werror
-# #-fsanitize=address -g3
+#-fsanitize=address -g3
 LFLAGS = -L ~/goinfre/homebrew/Cellar/readline/8.2.1/lib
 IFLAGS = -I ~/goinfre/homebrew/Cellar/readline/8.2.1/include/readline
 FILES = minishell.c  $(PRC)/handle_quotes.c $(PRC)/utils/utils0.c\
 		$(PRC)/utils/utils1.c $(PRC)/lexer.c $(PRC)/expanding.c\
-		$(PRC)/utils/lexer_utils.c  $(BLT)/echo.c $(BLT)/exit.c\
+		$(PRC)/utils/lexer_utils.c $(PRC)/utils/lexer_utils2.c  $(BLT)/echo.c $(BLT)/exit.c\
 		$(PRC)/errors/errors.c $(PRC)/errors/errors_utils.c $(PRC)/here_doc.c $(PRC)/utils/her_doc_utils.c \
-		$(BLT)/env.c $(BLT)/unset.c \
+		$(BLT)/env.c $(BLT)/unset.c main_utils/utils0.c \
 		$(BLT)/cd.c $(BLT)/export.c $(BLT)/export_utils.c \
-		$(BLT)/execution/utils_execution.c $(BLT)/execution/main_builtins.c
+		$(BLT)/execution/utils_execution.c $(BLT)/execution/main_builtins.c\
+
 
 OBJCS = $(FILES:.c=.o)
 
@@ -27,7 +28,6 @@ $(NAME) : $(OBJCS)
 	@make -C get_next_line
 	@echo "\033[0;32mCompiling minishell..."
 	@$(CC)  $(OBJCS) -lreadline $(CFLAGS) $(LFLAGS) $(IFLAGS) $(INCLUDES) -o $(NAME)
-	make clean
 	@echo "\n\x1b[34mDone !\033[0m"
 
 %.o:%.c

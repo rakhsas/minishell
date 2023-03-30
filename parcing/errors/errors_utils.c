@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 00:47:14 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/27 17:13:02 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/28 17:44:37 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int check_cmd_syntax(char *str)
 		return(0);
 	if(!check_quotes(str))
 		return (0);
+    //check_command(str);
 	return (1);
 }
 

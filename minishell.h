@@ -6,7 +6,7 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 08:53:18 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/29 12:13:24 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/30 17:45:54 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ typedef struct	s_dependences
 	char			**content;
 	char			**staar;
 }   t_dependences;
+extern struct s_dependences dep;
 
 typedef struct s_list
 {
@@ -106,27 +107,21 @@ char 		*ft_join_free(char *s1, char *s2);
 void 		get_infile(t_list *list, char *val);
 void 		get_outfile(t_list *list, char *val, int type);
 int			quotes(char *line, int index);
-
-/**** expanding ********/
-
-char 		*ft_get_arg(char **env, char *str, int *i);
-char 		*ft_expand(char **env, char *str);
-
-/*************************/
-/******* Builtins ********/
-void		echo(char **env, t_list *list);
-void		expaned_arg(char **env, char *arg);
-int			ft_exit(t_list *data);
-/*************************/
 void 		ft_add_str(char *ln, t_token **token,char *p, int *i);
 void 		ft_add_opr(char *ln, t_token **token,char *p, int *i);
 int			ignore_sep(char c, char *line, int index);
-/**********PIPE ERRORS**********************/
+int 		is_std(char *val, t_list *list);
+void		get_token(char *line, t_token **token);
+int			tokens(char *line, t_token **token);
 
-// int 		pipe_errors(t_token **token);
-// int 		check_oper(t_token **token);
-// int  		ft_error_char(char *str);
-// int 		check_command(char *str);
+/**** expanding ********/
+char 		*ft_get_arg(char **env, char *str, int *i);
+char 		*ft_expand(char **env, char *str);
+/******* Builtins ********/
+void		echo(char **env, t_list *list);
+// void		expaned_arg(char **env, char *arg);
+int			ft_exit(t_list *data);
+
 /***********HERE-DOC************/
 // int here_doc(char *limiter, char **env, t_file **f);
 char 	*here_doc(char *limiter, char **env);
@@ -138,7 +133,7 @@ int 		do_exp_inp(char *limiter);
 void 		open_her(t_token **token, char **env);
 int	ft_listsize(t_list *list);
 /************ EXECUTION ************/
-void	ft_env(void);
+void	ft_env(int inf);
 void	ft_unset(t_list *lst);
 void	ft_cd(t_list *list);
 char	*get_pwd(char *str);
@@ -158,6 +153,16 @@ int check_command(char *str);
 int check_token_syntax(t_token **token);
 int    check_quotes(char *str);
 int check_cmd_syntax(char *str);
-t_dependences dep;
+
+/************MAIN UTILS****************/
+
+void ft_free_token(t_token **list);
+void ft_free_list(t_list *list);
+void ft_ck(t_list **lst);
+void handle_signal1(int s);
+void handle_signal2(int s);
+void	print_error(char *str1, char *str2);
+
+void ft(int c);
 # endif
 // echo 'dhfhygnfhgynf'

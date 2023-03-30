@@ -3,32 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
+/*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 10:50:47 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/23 15:53:09 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/29 15:15:13 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	list_init(t_list *list)
-{
-	list->args = NULL;
-	// list->args[0] = NULL;
-	list->cmd = NULL;
-	list->infile = 0;
-	list->outfile = 1;
-	list->append_in = 1;
-	list->perror = 1;
-	list->next = NULL;
-}
-
 void	get_cmd(t_list **list, t_token **token)
 {
 	t_token	*tmp;
 	t_list	*tmp_list;
-	
+
 	tmp = *token;
 	tmp_list = (t_list *)malloc(sizeof(t_list));
 	list_init(tmp_list);
@@ -80,20 +68,6 @@ void	type_arg(t_token *token)
 		token->type = ARG;
 }
 
-int	ignore_sep(char c, char *line, int index)
-{
-	if (quotes(line, index))
-		return (0);
-	if (c && c == '|')
-		return (1);
-	else if (c && c == '>')
-		return (1);
-	else if (c && c == ' ')
-		return (1);
-	else if (c && c == '<')
-		return (1);
-	return (0);
-}
 //leaks visited : done
 void	get_token(char *line, t_token **token)
 {
@@ -107,10 +81,28 @@ void	get_token(char *line, t_token **token)
 		p = ft_calloc(1, 1);
 		if (line[i] && !ignore_sep(line[i], line, i))
 			ft_add_str(line, token, p, &i);
-		else
-		{
-			if (line[i] && ignore_sep(line[i], line, i))
+		 if (line[i] && ignore_sep(line[i], line, i))
 				ft_add_opr(line, token, p, &i);
-		}
 	}
+}
+//stoped here
+int	tokens(char *line, t_token **token)
+{
+	t_token	*tmp;
+
+	get_token(line, token);
+	tmp = *token;
+	while (tmp)
+	{
+		type_arg(tmp);
+		if(tmp->type == INFILE || tmp->type == OUTFILE)
+			tmp->val = ft_expand(dep.env, tmp->val);
+		tmp = tmp->next;
+	}
+	if(!check_token_syntax(token))
+	{
+		return(SYNTAX_ERROR);
+		dep.exit_status  = SYNTAX_ERROR;
+	}
+	return(1);
 }

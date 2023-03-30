@@ -6,7 +6,7 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 23:24:00 by rakhsas           #+#    #+#             */
-/*   Updated: 2023/03/23 17:18:56 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/29 15:45:50 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,11 @@ void	is_numeric(char **args)
 		{
 			if ((args[0][0] == '-' || args[0][0] == '+') && args[0][1] == '0'
 			&& !ft_atoi(&args[0][1]))
-				(printf("exit\n"), exit(0));
+				(ft_putendl_fd("exit", 1), exit(0));
 			if (args[0][j] != '0' && !ft_atoi(&args[0][j]))
 			{
-				write(2, "minishell: exit: ", 17);
-				write(2, args[0], ft_strlen(args[0]));
-				write(2, ": numeric argument required\n", 28);
+				print_error("minishell: exit: ", args[0]);
+				ft_putendl_fd(": numeric argument required", 2);
 				dep.exit_status = 255;
 				exit(dep.exit_status);
 			}
@@ -59,25 +58,24 @@ int	ft_exit(t_list *data)
 
 	len = count_args(data->args + 1);
 	if (len == 1)
-		(printf("exit\n"), dep.exit_status = 0, exit(dep.exit_status));
+		(ft_putendl_fd("exit", 1), dep.exit_status = 0, exit(dep.exit_status));
 	if (data->args + 1)
 	{
 		is_numeric(data->args + 1);
 		if (len > 2)
-			write(2, "exit\nminishell: exit: too many arguments\n", 41);
+			print_error("exit\n", "minishell: exit: too many arguments\n");
 		else if (len == 2)
 		{
 			len = ft_atoi(data->args[1]);
 			if (data->args[1][0] != '-' && len < 0)
 			{
-				write(2, "minishell: exit: ", 17);
-				write(2, data->args[1], ft_strlen(data->args[1]));
-				write(2, ": numeric argument required\n", 28);
+				print_error("minishell: exit: ", data->args[1]);
+				ft_putendl_fd(": numeric argument required", 2);
 				dep.exit_status = 255;
 				exit(dep.exit_status);
 			}
 			else
-				(printf("exit\n"), dep.exit_status = ft_atoi(data->args[1]),
+				(ft_putendl_fd("exit", 1), dep.exit_status = ft_atoi(data->args[1]),
 					exit(dep.exit_status));
 		}
 	}

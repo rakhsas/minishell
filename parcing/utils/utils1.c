@@ -6,7 +6,7 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 19:50:15 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/25 14:05:33 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/30 13:58:26 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ char **ft_realloc(char **p, char *str)
 	{
 		rp[i] = ft_calloc(1, 1);
 		rp[i] = ft_join_free(rp[i], p[i]);
+		free(p[i]);
 		i++;
 	}
 	rp[i] = ft_calloc(1, 1);

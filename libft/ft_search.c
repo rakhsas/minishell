@@ -1,44 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   ft_search.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/15 10:03:56 by rakhsas           #+#    #+#             */
-/*   Updated: 2023/03/29 17:49:23 by rakhsas          ###   ########.fr       */
+/*   Created: 2023/03/30 01:19:40 by rakhsas           #+#    #+#             */
+/*   Updated: 2023/03/30 01:35:52 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "libft.h"
 
-int	search(char *str, char c)
+int	ftsearch(char *haystack, char *needle, size_t len)
 {
-	int	i;
+	unsigned int	i;
+	unsigned int	j;
 
 	i = 0;
-	while (str[i])
+	while (haystack[i] && (i < len))
 	{
-		if (str[i] == c)
+		j = 0;
+		while (needle[j] == haystack[i + j] && (i + j < len))
 		{
-			if (str[i+1])
+			if (needle[j + 1] == '\0')
+			{
 				return (1);
+			}
+			j++;
 		}
 		i++;
 	}
 	return (0);
-}
-void	ft_env(int out)
-{
-	int	i;
-
-	i = 0;
-	if (!dep.env)
-		ft_putstr_fd("env: No such file or directory\n", out);
-	while (dep.env[i])
-	{
-		if (search(dep.env[i], '=') == 1)
-			ft_putendl_fd(dep.env[i], out);
-		i++;
-	}
 }

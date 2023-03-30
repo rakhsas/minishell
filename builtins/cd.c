@@ -6,7 +6,7 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 11:34:21 by rakhsas           #+#    #+#             */
-/*   Updated: 2023/03/27 23:16:39 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/30 15:39:07 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	update_pwd(char *path)
 		}
 		i++;
 	}
-	free(path);
+	// free(path);
 }
 
 void	update_old_pwd(void)
@@ -73,18 +73,36 @@ void	ft_cd(t_list *list)
 	if (!list->args[1])
 	{
 		path = get_pwd("HOME=");
-		chdir(path);
+		if (chdir(path) == -1)
+		{
+			print_error("minishell: ", list->args[1]);
+			ft_putendl_fd(": HOME not set", 2);
+			dep.exit_status = ERROR;
+			return ;
+		}
 	}
 	else if (list->args[1][0] == 0)
 		return ;
+	else if (list->args[1][0] == '-')
+	{
+		// printf("differ:%d\n\\'pwd: %s'\n\\'oldpwd: %s'\n", ft_strcmp(get_pwd("OLDPWD="),get_pwd("PWD=")), get_pwd("PWD="), get_pwd("OLDPWD="));
+		if (ft_strcmp(get_pwd("OLDPWD="),get_pwd("PWD=")) == 0)
+		{
+			ft_putendl_fd("minishell: cd: OLDPWD not set", 2);
+			dep.exit_status = ERROR;
+		}
+		else
+			chdir(get_pwd("OLDPWD="));
+	}
 	else if (list->args[1][0] == '~' && ft_strlen(list->args[1]) >= 1)
 		path = get_pwd("HOME=");
 	else
 		path = list->args[i];
 	if (list->args && path && chdir(path) == -1)
 	{
-		printf("cd: %s: No such file or directory\n", list->args[1]);
-		dep.exit_status = 1;
+		print_error("cd: ", list->args[1]);
+		ft_putendl_fd(": No such file or directory", 2);
+		dep.exit_status = ERROR;
 	}
 	update_old_pwd();
 	// free(path);
@@ -93,5 +111,5 @@ void	ft_cd(t_list *list)
 	// dep.pwd = ft_strdup(getcwd(NULL, 0));
 	if (path)
 		update_pwd(path);
-	// system ("leaks minishell");
+	while (1);
 }

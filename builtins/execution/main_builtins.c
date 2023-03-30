@@ -6,7 +6,7 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 13:52:44 by rakhsas           #+#    #+#             */
-/*   Updated: 2023/03/29 14:00:32 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/30 17:47:36 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	ft_main_execution(int i, t_list *list)
 				x++;
 				ft_putstr_fd(list->args[0], 2);
 				ft_putstr_fd(": No such file or directory\n", 2);
-				dep.exit_status = ERROR;
+				dep.exit_status = UNKNOWN_COMMAND;
 				exit(dep.exit_status);
 			}
 			if (execve(dep.staar[i], list->args, dep.env_copy) == -1)
@@ -92,7 +92,7 @@ void	main_execution(t_list *list)
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(list->args[1], 2);
 		ft_putstr_fd(": No such file or directory\n", 2);
-		dep.exit_status = 127;
+		dep.exit_status = ERROR;
 		exit(dep.exit_status);
 	}
 	dep.staar = ft_split(dep.str + 5, ':');
