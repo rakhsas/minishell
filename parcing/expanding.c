@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 15:53:31 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/31 03:06:15 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/31 04:22:14 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ char	*ft_get_arg(char **env, char *str, int *i)
 {
 	char	*p;
 	char	*val;
-
 	p = ft_strdup("");
 	if (!ft_isalnum(str[*i + 1]) && str[*i + 1] != '_' && str[(*i + 1)] != '?' && !quotes(str, *i
 			+ 2))
@@ -56,13 +55,13 @@ char	*ft_get_arg(char **env, char *str, int *i)
 	val = get_value(env, p);
 	return (free(p), val);
 }
-
+//stopped here
 //leaks : visited
 char	*ft_expand(char **env, char *str)
 {
 	int		i;
 	char	*p;
-	char	*value;
+	char	*value = 0;
 
 	i = -1;
 	p = ft_strdup("");
@@ -71,6 +70,7 @@ char	*ft_expand(char **env, char *str)
 		if (str[i] == '$' && (quotes(str, i) == 0 || quotes(str, i) == 1))
 		{
 			value = ft_get_arg(env, str, (&i));
+			
 			p = ft_join_free(p, value);
 		}
 		else

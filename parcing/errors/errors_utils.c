@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 00:47:14 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/31 00:56:53 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/31 03:45:10 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ int	is_opr(int type)
 
 int	check_cmd_syntax(char *str)
 {
-	if (!ft_error_char(str))
-		return (0);
+	// if (!ft_error_char(str))
+	// 	return (0);
 	if (!check_quotes(str))
 		return (0);
 	return (1);
