@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 08:56:34 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/31 00:47:51 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/31 03:25:39 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	expand_list(char **env, t_list **list)
 			while (tmp->args[++i])
 			{
 				tmp->args[i] = ft_expand(env, tmp->args[i]);
-				if (!check_command(tmp->args[i]))
+				if (!check_command(tmp->args[0]))
 					tmp->infile = -1;
 			}
 		}
@@ -85,6 +85,7 @@ void	ft_next(char *line, t_token *data, t_list *list)
 	if (tokens(line, &data) == 258)
 	{
 		ft_lstclear(&data);
+		free(line);
 		return ;
 	}
 	get_cmd(&list, &data);

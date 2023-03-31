@@ -26,7 +26,6 @@ $(NAME) : $(OBJCS)
 	@make -C get_next_line
 	@echo "\033[0;32mCompiling minishell..."
 	@$(CC)  $(OBJCS) -lreadline  $(CFLAGS) $(INCLUDES) -o $(NAME)
-	make clean
 	@echo "\n\x1b[34mDone !\033[0m"
 
 %.o:%.c

@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 15:53:31 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/31 01:14:39 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/31 03:06:15 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	*ft_get_arg(char **env, char *str, int *i)
 	char	*val;
 
 	p = ft_strdup("");
-	if (!ft_isalnum(str[*i + 1]) && str[(*i + 1)] != '?' && !quotes(str, *i
+	if (!ft_isalnum(str[*i + 1]) && str[*i + 1] != '_' && str[(*i + 1)] != '?' && !quotes(str, *i
 			+ 2))
 	{
 		while (str[*i] && str[*i] != '$')
@@ -50,7 +50,7 @@ char	*ft_get_arg(char **env, char *str, int *i)
 		(*i)++;
 		return (free(p), ft_itoa(g_dep.exit_status));
 	}
-	while (str[++(*i)] && ft_isalnum(str[*i]))
+	while (str[++(*i)] && (ft_isalnum(str[*i]) || str[*i] == '_'))
 		p = ft_charjoin(p, str[*i]);
 	(*i)--;
 	val = get_value(env, p);

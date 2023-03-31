@@ -6,7 +6,7 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 09:46:24 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/31 01:16:42 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/31 03:28:10 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,22 +59,25 @@ char	*check_name(void)
 void	fill_file(int *fd, char *limiter, char **env)
 {
 	char	*buffer;
+	char *p;
 
+	p = exp_limiter(limiter);
 	while (1 && *fd != -1)
 	{
 		ft_putstr_fd("heredoc> ", 0);
 		buffer = get_next_line(0);
-		if (!ft_strncmp(buffer, exp_limiter(limiter), ft_strlen(buffer) - 1)
-			&& ft_strlen(buffer) - 1 == ft_strlen(exp_limiter(limiter)))
+		if (!ft_strncmp(buffer, p, ft_strlen(buffer) - 1)
+			&& ft_strlen(buffer) - 1 == ft_strlen(p))
 		{
 			free(buffer);
 			exit(0);
 		}
 		if (do_exp_inp(limiter))
-			buffer = ft_herd_exp(env, buffer);
+			buffer = ft_herd_exp(env, buffer);	
 		ft_putstr_fd(buffer, *fd);
+		free(buffer);
 	}
-	free(buffer);
+	free(p);
 	exit(0);
 }
 // g_dep.files = ft_realloc(g_dep.files, name);
