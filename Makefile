@@ -6,7 +6,7 @@ PRC = parcing
 CFLAGS = -Wall -Wextra -Werror #-fsanitize=address -g3
 
 FILES = minishell.c  $(PRC)/handle_quotes.c $(PRC)/utils/utils0.c\
-		$(PRC)/utils/utils1.c $(PRC)/lexer.c $(PRC)/expanding.c\
+		$(PRC)/utils/utils1.c  $(PRC)/utils/utils2.c $(PRC)/lexer.c $(PRC)/expanding.c\
 		$(PRC)/utils/lexer_utils.c $(PRC)/utils/lexer_utils2.c  $(BLT)/echo.c $(BLT)/exit.c\
 		$(PRC)/errors/errors.c $(PRC)/errors/errors_utils.c $(PRC)/here_doc.c $(PRC)/utils/her_doc_utils.c \
 		$(BLT)/env.c $(BLT)/unset.c main_utils/utils0.c \

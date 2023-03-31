@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 23:24:00 by rakhsas           #+#    #+#             */
-/*   Updated: 2023/03/23 17:18:56 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/31 00:07:13 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ void	is_numeric(char **args)
 				write(2, "minishell: exit: ", 17);
 				write(2, args[0], ft_strlen(args[0]));
 				write(2, ": numeric argument required\n", 28);
-				dep.exit_status = 255;
-				exit(dep.exit_status);
+				g_dep.exit_status = 255;
+				exit(g_dep.exit_status);
 			}
 			j++;
 		}
@@ -59,7 +59,7 @@ int	ft_exit(t_list *data)
 
 	len = count_args(data->args + 1);
 	if (len == 1)
-		(printf("exit\n"), dep.exit_status = 0, exit(dep.exit_status));
+		(printf("exit\n"), g_dep.exit_status = 0, exit(g_dep.exit_status));
 	if (data->args + 1)
 	{
 		is_numeric(data->args + 1);
@@ -73,12 +73,12 @@ int	ft_exit(t_list *data)
 				write(2, "minishell: exit: ", 17);
 				write(2, data->args[1], ft_strlen(data->args[1]));
 				write(2, ": numeric argument required\n", 28);
-				dep.exit_status = 255;
-				exit(dep.exit_status);
+				g_dep.exit_status = 255;
+				exit(g_dep.exit_status);
 			}
 			else
-				(printf("exit\n"), dep.exit_status = ft_atoi(data->args[1]),
-					exit(dep.exit_status));
+				(printf("exit\n"), g_dep.exit_status = ft_atoi(data->args[1]),
+					exit(g_dep.exit_status));
 		}
 	}
 	return (1);

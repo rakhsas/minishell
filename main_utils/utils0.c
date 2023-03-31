@@ -6,17 +6,17 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 15:56:54 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/29 01:51:52 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/31 00:42:47 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void ft_free_token(t_token **list)
+void	ft_free_token(t_token **list)
 {
-	t_token *tmp;
+	t_token	*tmp;
 
-	while(*list)
+	while (*list)
 	{
 		tmp = *list;
 		*list = (*list)->next;
@@ -24,43 +24,49 @@ void ft_free_token(t_token **list)
 	}
 }
 
-void ft_free_list(t_list *list)
+void	ft_free_list(t_list *list)
 {
-	if(list->args[0])
+	if (list->args[0])
 		free(list->args[0]);
-	if(list->args)
+	if (list->args)
 		free_double(list->args);
 	list = NULL;
 }
 
-void ft_ck(t_list **lst)
+void	handle_signal1(int s)
 {
-	t_list *tmp;
-	 tmp = *lst;
-	while(tmp)
-	{
-		printf("%d", tmp->infile);
-		if(tmp->infile == -1)
-		{
-			printf("error");
-			return;
-		}
-		tmp = tmp->next;
-	}
+	(void)s;
 }
 
-void handle_signal1(int s)
+void	handle_signal2(int s)
 {
-	(void) s;
-}
-void handle_signal2(int s)
-{
-	(void) s;
+	(void)s;
 	exit(0);
 }
 
-// ft_printf(char *str1, char *str2, int fd_in)
-// {
-// 	ft_putstr_fd(str1, fd_in);
-// 	ft_putstr_fd(str2, fd_in);
-// }
+void	free_list(t_list *head)
+{
+	t_list	*current;
+	t_list	*next;
+	int		i;
+
+	current = head;
+	while (current != NULL)
+	{
+		next = current->next;
+		if (current->cmd)
+			free(current->cmd);
+		i = 0;
+		if (current->args)
+		{
+			while (current->args[i] != NULL)
+			{
+				free(current->args[i]);
+				i++;
+			}
+		}
+		free(current->args);
+		free(current);
+		current = next;
+	}
+}

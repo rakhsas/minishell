@@ -6,78 +6,60 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 08:56:34 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/30 21:34:43 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/31 00:47:51 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft(int c)
-{
-	if (c == CMD)
-		printf("CMD ");
-	if (c == ARG)
-		printf("ARG ");
-	if (c == TRUNC)
-		printf("TRUNC ");
-	if (c == APPEND)
-		printf("APPEND ");
-	if (c == INPUT)
-		printf("INPUT ");
-	if (c == PIPE)
-		printf("PIPE ");
-	if (c == INFILE)
-		printf("INFILE ");
-	if (c == OUTFILE)
-		printf("OUTFILE ");
-	if (c == HERDOC)
-		printf("HERDOC ");
-	if (c == LIMITER)
-		printf("LIMITER ");
-}
+// void	ft(int c)
+// {
+// 	if (c == CMD)
+// 		printf("CMD ");
+// 	if (c == ARG)
+// 		printf("ARG ");
+// 	if (c == TRUNC)
+// 		printf("TRUNC ");
+// 	if (c == APPEND)
+// 		printf("APPEND ");
+// 	if (c == INPUT)
+// 		printf("INPUT ");
+// 	if (c == PIPE)
+// 		printf("PIPE ");
+// 	if (c == INFILE)
+// 		printf("INFILE ");
+// 	if (c == OUTFILE)
+// 		printf("OUTFILE ");
+// 	if (c == HERDOC)
+// 		printf("HERDOC ");
+// 	if (c == LIMITER)
+// 		printf("LIMITER ");
+// }
 
 //lesks checked : done
-void expand_list(char **env, t_list **list)
+void	expand_list(char **env, t_list **list)
 {
-	t_list *tmp;
-	int i;
+	t_list	*tmp;
+	int		i;
+
 	i = -1;
 	tmp = *list;
-	while(tmp)
+	while (tmp)
 	{
-		if(tmp->cmd)
+		if (tmp->cmd)
 			tmp->cmd = ft_expand(env, tmp->cmd);
-		if(tmp->args)
+		if (tmp->args)
 		{
-			while(tmp->args[++i])
+			while (tmp->args[++i])
 			{
 				tmp->args[i] = ft_expand(env, tmp->args[i]);
-				if(!check_command(tmp->args[i]))
+				if (!check_command(tmp->args[i]))
 					tmp->infile = -1;
 			}
 		}
 		i = -1;
 		tmp = tmp->next;
 	}
-}
-void free_list(t_list *head){
-    t_list *current = head;
-    while (current != NULL) {
-        t_list *next = current->next;
-		if(current->cmd)
-       		 free(current->cmd);
-        int i = 0;
-		if(current->args)
-		{
-		while (current->args[i] != NULL) {
-            free(current->args[i]);
-            i++;
-        }
-		}
-        free(current->args);
-        free(current);
-        current = next;
-    }
 }
 
 void	ft_lstclear(t_token **token)
@@ -100,30 +82,25 @@ void	ft_lstclear(t_token **token)
 
 void	ft_next(char *line, t_token *data, t_list *list)
 {
-	if(tokens(line, &data) == 258)
+	if (tokens(line, &data) == 258)
 	{
 		ft_lstclear(&data);
-		return;
-		
+		return ;
 	}
 	get_cmd(&list, &data);
-
-	// system("leaks minishell");
-	// exit(0);
 	ft_lstclear(&data);
-	expand_list(dep.env, &list);
-
+	expand_list(g_dep.env, &list);
 	if (list)
 		ft_exec(list);
 	free_list(list);
-	free (line);
+	free(line);
 }
 
-char **ft_help_env(char **env)
+char	**ft_help_env(char **env)
 {
 	char	**new_env;
-	int	i;
-	int	j;
+	int		i;
+	int		j;
 
 	i = 0;
 	j = 0;
@@ -152,7 +129,6 @@ char **ft_help_env(char **env)
 	return (new_env);
 }
 
-
 int	main(int ac, char **av, char **env)
 {
 	t_token	*data;
@@ -160,9 +136,9 @@ int	main(int ac, char **av, char **env)
 	char	*line;
 
 	data = malloc(sizeof(data));
-	dep.env = ft_help_env(env);
-	dep.env_copy = ft_help_env(env);
-	dep.pwd = get_pwd("PWD=");
+	g_dep.env = ft_help_env(env);
+	g_dep.env_copy = ft_help_env(env);
+	g_dep.pwd = get_pwd("PWD=");
 	list = NULL;
 	(void)ac;
 	(void)av;
@@ -173,9 +149,9 @@ int	main(int ac, char **av, char **env)
 		line = readline("\x1b[1m\x1b[33mminishell$ \033[0m");
 		if (!line)
 			break ;
-		if(!check_cmd_syntax(line))
+		if (!check_cmd_syntax(line))
 		{
-			dep.exit_status = SYNTAX_ERROR;
+			g_dep.exit_status = SYNTAX_ERROR;
 			add_history(line);
 			free(line);
 			continue ;

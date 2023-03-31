@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 11:34:21 by rakhsas           #+#    #+#             */
-/*   Updated: 2023/03/27 23:16:39 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/31 00:09:05 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@ void	update_pwd(char *path)
 	int	i;
 
 	i = 0;
-	while (dep.env[i])
+	while (g_dep.env[i])
 	{
-		if (ft_strnstr(dep.env[i], "PWD=", ft_strlen("PWD=")))
+		if (ft_strnstr(g_dep.env[i], "PWD=", ft_strlen("PWD=")))
 		{
-			free(dep.env[i]);
-			dep.env[i] = ft_strjoin("PWD=", path);
-			dep.pwd = path;
+			free(g_dep.env[i]);
+			g_dep.env[i] = ft_strjoin("PWD=", path);
+			g_dep.pwd = path;
 		}
 		i++;
 	}
@@ -35,12 +35,12 @@ void	update_old_pwd(void)
 	int	i;
 
 	i = 0;
-	while (dep.env[i])
+	while (g_dep.env[i])
 	{
-		if (ft_strnstr(dep.env[i], "OLDPWD", ft_strlen("OLDPWD")))
+		if (ft_strnstr(g_dep.env[i], "OLDPWD", ft_strlen("OLDPWD")))
 		{
-			free(dep.env[i]);
-			dep.env[i] = ft_strjoin("OLDPWD=", dep.pwd);
+			free(g_dep.env[i]);
+			g_dep.env[i] = ft_strjoin("OLDPWD=", g_dep.pwd);
 			return ;
 		}
 		i++;
@@ -53,10 +53,10 @@ char	*get_pwd(char *str)
 	int		i;
 
 	i = 0;
-	while (dep.env[i])
+	while (g_dep.env[i])
 	{
-		if (ft_strnstr(dep.env[i], str, ft_strlen(str)))
-			path = dep.env[i] + ft_strlen(str);
+		if (ft_strnstr(g_dep.env[i], str, ft_strlen(str)))
+			path = g_dep.env[i] + ft_strlen(str);
 		i++;
 	}
 	if (!path || ft_strlen(path) == 0)
@@ -84,13 +84,13 @@ void	ft_cd(t_list *list)
 	if (list->args && path && chdir(path) == -1)
 	{
 		printf("cd: %s: No such file or directory\n", list->args[1]);
-		dep.exit_status = 1;
+		g_dep.exit_status = 1;
 	}
 	update_old_pwd();
 	// free(path);
 	path = getcwd(NULL, 0);
-	// free(dep.pwd);
-	// dep.pwd = ft_strdup(getcwd(NULL, 0));
+	// free(g_dep.pwd);
+	// g_dep.pwd = ft_strdup(getcwd(NULL, 0));
 	if (path)
 		update_pwd(path);
 	// system ("leaks minishell");
