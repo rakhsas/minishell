@@ -6,149 +6,134 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 08:56:34 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/29 13:46:43 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/04/01 00:14:28 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft(int c)
-{
-	if (c == CMD)
-		printf("CMD ");
-	if (c == ARG)
-		printf("ARG ");
-	if (c == TRUNC)
-		printf("TRUNC ");
-	if (c == APPEND)
-		printf("APPEND ");
-	if (c == INPUT)
-		printf("INPUT ");
-	if (c == PIPE)
-		printf("PIPE ");
-	if (c == INFILE)
-		printf("INFILE ");
-	if (c == OUTFILE)
-		printf("OUTFILE ");
-	if (c == HERDOC)
-		printf("HERDOC ");
-	if (c == LIMITER)
-		printf("LIMITER ");
-}
-//lesks checked : done
-int	tokens(char *line, t_token **token)
-{
-	t_token	*tmp;
+struct s_g_dependences g_dep;
 
-	get_token(line, token);
+// void	ft(int c)
+// {
+// 	if (c == CMD)
+// 		printf("CMD ");
+// 	if (c == ARG)
+// 		printf("ARG ");
+// 	if (c == TRUNC)
+// 		printf("TRUNC ");
+// 	if (c == APPEND)
+// 		printf("APPEND ");
+// 	if (c == INPUT)
+// 		printf("INPUT ");
+// 	if (c == PIPE)
+// 		printf("PIPE ");
+// 	if (c == INFILE)
+// 		printf("INFILE ");
+// 	if (c == OUTFILE)
+// 		printf("OUTFILE ");
+// 	if (c == HERDOC)
+// 		printf("HERDOC ");
+// 	if (c == LIMITER)
+// 		printf("LIMITER ");
+// }
 
-	tmp = *token;
-	while (tmp)
-	{
-		type_arg(tmp);
-		if(tmp->type == INFILE || tmp->type == OUTFILE)
-			tmp->val = ft_expand(dep.env, tmp->val);
-		tmp = tmp->next;
-	}
-	// if(!pipe_errors(token))
-	// 	return (0);
-	return(1);
-}
-//lesks checked : done
-void expand_list(char **env, t_list **list)
+//leaks checked : done
+void	expand_list(char **env, t_list **list)
 {
-	t_list *tmp;
-	int i;
+	t_list	*tmp;
+	int		i;
+
 	i = -1;
 	tmp = *list;
-	while(tmp)
+	while (tmp)
 	{
-		if(tmp->cmd)
+		if (tmp->cmd)
 			tmp->cmd = ft_expand(env, tmp->cmd);
-		if(tmp->args)
+		if (tmp->args)
 		{
-			while(tmp->args[++i])
+			while (tmp->args[++i])
+			{
 				tmp->args[i] = ft_expand(env, tmp->args[i]);
+				if (!check_command(tmp->args[0]))
+				{
+					tmp->infile = -1;
+				}
+			}
 		}
 		i = -1;
 		tmp = tmp->next;
 	}
 }
 
-void ft_free_token(t_token **list)
+void	free_list(t_list *head)
 {
-	t_token *tmp;
+	t_list	*current;
+	t_list	*next;
+	int		i;
 
-	while(*list)
+	current = head;
+	while (current != NULL)
 	{
-		tmp = *list;
-		*list = (*list)->next;
-		free(tmp);
-	}
-}
-
-void ft_free_list(t_list *list)
-{
-	if(list->args[0])
-		free(list->args[0]);
-	if(list->args)
-		free_double(list->args);
-	list = NULL;
-}
-
-void ft_ck(t_list **lst)
-{
-	t_list *tmp;
-	 tmp = *lst;
-	while(tmp)
-	{
-		printf("%d", tmp->infile);
-		if(tmp->infile == -1)
+		next = current->next;
+		if (current->cmd)
+			free(current->cmd);
+		i = 0;
+		if (current->args)
 		{
-			printf("error");
-			return;
+			while (current->args[i] != NULL)
+			{
+				free(current->args[i]);
+				i++;
+			}
 		}
-		tmp = tmp->next;
+		free(current->args);
+		free(current);
+		current = next;
 	}
 }
 
+void	ft_lstclear(t_token **token)
+{
+	t_token	*current;
+	t_token	*next;
+
+	if (!token)
+		return ;
+	current = *token;
+	while (current != NULL)
+	{
+		next = current->next;
+		free(current->val);
+		free(current);
+		current = next;
+	}
+	*token = NULL;
+}
 
 void	ft_next(char *line, t_token *data, t_list *list)
 {
-	if(!tokens(line, &data))
+	if (tokens(line, &data) == 258)
+	{
+		ft_lstclear(&data);
 		return;
-	// if(!check_oper(&data))
-	// {
-	// 	return;
-	// }
+		free(line);
+		return ;
+	}
 	get_cmd(&list, &data);
-	expand_list(dep.env, &list);
+	ft_lstclear(&data);
+	expand_list(g_dep.env, &list);
 	if (list)
 		ft_exec(list);
-	free (line);
-	// system("leaks minishell");
+	free_list(list);
+	free(line);
 }
 
-void handle_signal1(int s)
-{
-	s = 0;
-	ft_putstr_fd("", 2);
-	rl_replace_line("\n", 1);
-	rl_on_new_line();
-	rl_redisplay();
-}
-
-void handle_signal2(int s)
-{
-	(void) s;
-	exit(0);
-}
-
-char **ft_help_env(char **env)
+char	**ft_help_env(char **env, int n)
 {
 	char	**new_env;
-	int	i;
-	int	j;
+	int		i;
+	int		j;
 
 	i = 0;
 	j = 0;
@@ -156,7 +141,10 @@ char **ft_help_env(char **env)
 		return (NULL);
 	while (env[i])
 		i++;
-	new_env = (char **)malloc(sizeof(char *) * (i + 2));
+	if (n == 0)
+		new_env = (char **)malloc(sizeof(char *) * (i + (n + 1) + 1));
+	else
+		new_env = (char **)malloc(sizeof(char *) * (i + n + 1));
 	if (!new_env)
 		return (NULL);
 	i = 0;
@@ -172,11 +160,27 @@ char **ft_help_env(char **env)
 		new_env[i][j] = 0;
 		i++;
 	}
-	new_env[i++] = ft_strdup("OLDPWD=");
+	if (n == 0)
+		new_env[i++] = ft_strjoin("OLDPWD=", getcwd(NULL, 0));
 	new_env[i] = NULL;
 	return (new_env);
 }
 
+int	checker(char **env)
+{
+	int	i;
+
+	i = 0;
+	while (env[i])
+	{
+		if (ftsearch(env[i], "OLDPWD=", ft_strlen("OLDPWD=")) == 1)
+		{
+			return (1);
+		}
+		i++;
+	}
+	return (0);
+}
 
 int	main(int ac, char **av, char **env)
 {
@@ -185,9 +189,10 @@ int	main(int ac, char **av, char **env)
 	char	*line;
 
 	data = malloc(sizeof(data));
-	dep.env = ft_help_env(env);
-	dep.env_copy = ft_help_env(env);
-	dep.pwd = get_pwd("PWD=");
+	g_dep.env = ft_help_env(env, checker(env));
+	g_dep.env_copy = ft_help_env(env, checker(env));
+
+	g_dep.pwd = get_pwd("PWD=");
 	list = NULL;
 	(void)ac;
 	(void)av;
@@ -195,18 +200,19 @@ int	main(int ac, char **av, char **env)
 	while (1)
 	{
 		signal(SIGINT, handle_signal1);
-		line = readline("\x1b[1m\x1b[33mminishell$ \033[0m");
+		// line = readline("\x1b[1m\x1b[33mminishell$ \033[0m");
+		line = readline("minishell$ ");
 		if (!line)
 			break ;
 		if (!check_cmd_syntax(line))
 		{
-			dep.exit_status = ERROR;
+			g_dep.exit_status = SYNTAX_ERROR;
 			add_history(line);
 			free(line);
 			continue ;
 		}
-		add_history(line);
+		if (ft_strlen(line))
+			add_history(line);
 		ft_next(line, data, list);
-		// dep.exit_status = SUCCESS;
 	}
 }

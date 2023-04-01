@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_quotes.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 08:55:13 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/28 01:30:19 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/28 14:17:53 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,5 +43,7 @@ int	check_quotes(char *str)
 		else if (str[i] == '\'' && check == 1)
 			check_quotes_util(str, &check, &i);
 	}
+	if (!check)
+		printf("Syntax Error!\n");
 	return (check);
 }

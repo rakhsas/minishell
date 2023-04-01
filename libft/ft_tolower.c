@@ -6,10 +6,11 @@
 /*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 21:07:01 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/12 21:03:14 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/31 01:19:59 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 
 int	ft_tolower(int c)
 {

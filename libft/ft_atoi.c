@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aankote <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 14:46:15 by aankote           #+#    #+#             */
-/*   Updated: 2022/10/25 00:01:30 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/31 01:33:11 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "libft.h"
 
 int	ft_atoi(const char *str)
