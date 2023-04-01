@@ -1,0 +1,12 @@
+Makefile
+README.md
+builtins
+get_next_line
+libft
+main_utils
+minishell
+minishell.c
+minishell.h
+minishell.o
+out
+parcing

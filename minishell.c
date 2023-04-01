@@ -6,7 +6,7 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 08:56:34 by aankote           #+#    #+#             */
-/*   Updated: 2023/04/01 00:14:28 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/04/01 23:08:18 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,11 +199,14 @@ int	main(int ac, char **av, char **env)
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
-		signal(SIGINT, handle_signal1);
+		signal(SIGINT, handle_signal2);
 		// line = readline("\x1b[1m\x1b[33mminishell$ \033[0m");
 		line = readline("minishell$ ");
 		if (!line)
+		{
+			g_dep.exit_status = 0;
 			break ;
+		}
 		if (!check_cmd_syntax(line))
 		{
 			g_dep.exit_status = SYNTAX_ERROR;

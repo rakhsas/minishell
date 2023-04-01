@@ -6,7 +6,7 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 11:21:32 by rakhsas           #+#    #+#             */
-/*   Updated: 2023/04/01 16:49:47 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/04/01 17:17:12 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,8 @@ void	ft_exec(t_list *list)
 			pid = fork();
 			if (pid == 0)
 			{
+				signal(SIGINT, SIG_DFL);
+				signal(SIGQUIT, SIG_DFL);
 				if (list->infile == -1 || list->outfile == -1)
 				{
 					if (access(list->args[0], R_OK) == -1)
@@ -171,8 +173,10 @@ void	ft_exec(t_list *list)
 				main_execution(list);
 			}
 			waitpid(pid, &g_dep.exit_status, 0);
-			g_dep.exit_status = WEXITSTATUS(g_dep.exit_status);
-			// fprintf(stderr, "%d", g_dep.exit_status);
+			if (g_dep.exit_status == 2)
+				g_dep.exit_status = 130;
+			else
+				g_dep.exit_status = WEXITSTATUS(g_dep.exit_status);
 			while (wait(NULL) != -1)
 				;
 		}

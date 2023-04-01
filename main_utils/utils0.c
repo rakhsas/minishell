@@ -6,7 +6,7 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/28 15:56:54 by aankote           #+#    #+#             */
-/*   Updated: 2023/04/01 12:36:15 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/04/01 23:03:13 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,12 @@ void	handle_signal1(int s)
 void	handle_signal2(int s)
 {
 	s = 0;
-	rl_replace_line("\n", 0);
+	g_dep.exit_status = 1;
+	ft_putstr_fd("\n", 1);
+	rl_replace_line("", 1);
 	rl_on_new_line();
 	rl_redisplay();
 }
-
 
 void	print_error(char *str1, char *str2)
 {
