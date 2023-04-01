@@ -6,7 +6,7 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 10:03:56 by rakhsas           #+#    #+#             */
-/*   Updated: 2023/03/29 17:49:23 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/31 11:19:19 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,12 @@ void	ft_env(int out)
 	int	i;
 
 	i = 0;
-	if (!dep.env)
+	if (!g_dep.env)
 		ft_putstr_fd("env: No such file or directory\n", out);
-	while (dep.env[i])
+	while (g_dep.env[i])
 	{
-		if (search(dep.env[i], '=') == 1)
-			ft_putendl_fd(dep.env[i], out);
+		if (search(g_dep.env[i], '=') == 1)
+			ft_putendl_fd(g_dep.env[i], out);
 		i++;
 	}
 }

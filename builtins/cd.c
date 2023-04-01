@@ -6,7 +6,7 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 11:34:21 by rakhsas           #+#    #+#             */
-/*   Updated: 2023/03/30 23:13:36 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/31 11:22:04 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@ void	update_pwd(char *path)
 	int	i;
 
 	i = 0;
-	while (dep.env[i])
+	while (g_dep.env[i])
 	{
-		if (ft_strnstr(dep.env[i], "PWD=", ft_strlen("PWD=")))
+		if (ft_strnstr(g_dep.env[i], "PWD=", ft_strlen("PWD=")))
 		{
-			free(dep.env[i]);
-			dep.env[i] = ft_strjoin("PWD=", path);
-			dep.pwd = path;
+			free(g_dep.env[i]);
+			g_dep.env[i] = ft_strjoin("PWD=", path);
+			g_dep.pwd = path;
 		}
 		i++;
 	}
@@ -35,12 +35,12 @@ void	update_old_pwd(void)
 	int	i;
 
 	i = 0;
-	while (dep.env[i])
+	while (g_dep.env[i])
 	{
-		if (ft_strnstr(dep.env[i], "OLDPWD", ft_strlen("OLDPWD")))
+		if (ft_strnstr(g_dep.env[i], "OLDPWD", ft_strlen("OLDPWD")))
 		{
-			free(dep.env[i]);
-			dep.env[i] = ft_strjoin("OLDPWD=", dep.pwd);
+			free(g_dep.env[i]);
+			g_dep.env[i] = ft_strjoin("OLDPWD=", g_dep.pwd);
 			return ;
 		}
 		i++;
@@ -53,10 +53,10 @@ char	*get_pwd(char *str)
 	int		i;
 
 	i = 0;
-	while (dep.env[i])
+	while (g_dep.env[i])
 	{
-		if (ft_strnstr(dep.env[i], str, ft_strlen(str)))
-			path = dep.env[i] + ft_strlen(str);
+		if (ft_strnstr(g_dep.env[i], str, ft_strlen(str)))
+			path = g_dep.env[i] + ft_strlen(str);
 		i++;
 	}
 	if (!path || ft_strlen(path) == 0)
@@ -77,7 +77,7 @@ void	ft_cd(t_list *list)
 		{
 			print_error("minishell: ", list->args[1]);
 			ft_putendl_fd(": HOME not set", 2);
-			dep.exit_status = ERROR;
+			g_dep.exit_status = ERROR;
 			return ;
 		}
 	}
@@ -89,7 +89,7 @@ void	ft_cd(t_list *list)
 		if (ft_strcmp(get_pwd("OLDPWD="),get_pwd("PWD=")) == 0)
 		{
 			ft_putendl_fd("minishell: cd: OLDPWD not set", 2);
-			dep.exit_status = ERROR;
+			g_dep.exit_status = ERROR;
 		}
 		else
 		{
@@ -105,7 +105,7 @@ void	ft_cd(t_list *list)
 	{
 		print_error("cd: ", list->args[1]);
 		ft_putendl_fd(": No such file or directory", 2);
-		dep.exit_status = ERROR;
+		g_dep.exit_status = ERROR;
 	}
 	update_old_pwd();
 	path = getcwd(NULL, 0);

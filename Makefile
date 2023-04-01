@@ -8,7 +8,7 @@ CFLAGS = -Wall -Wextra -Werror
 LFLAGS = -L ~/goinfre/homebrew/Cellar/readline/8.2.1/lib
 IFLAGS = -I ~/goinfre/homebrew/Cellar/readline/8.2.1/include/readline
 FILES = minishell.c  $(PRC)/handle_quotes.c $(PRC)/utils/utils0.c\
-		$(PRC)/utils/utils1.c $(PRC)/lexer.c $(PRC)/expanding.c\
+		$(PRC)/utils/utils1.c  $(PRC)/utils/utils2.c $(PRC)/lexer.c $(PRC)/expanding.c\
 		$(PRC)/utils/lexer_utils.c $(PRC)/utils/lexer_utils2.c  $(BLT)/echo.c $(BLT)/exit.c\
 		$(PRC)/errors/errors.c $(PRC)/errors/errors_utils.c $(PRC)/here_doc.c $(PRC)/utils/her_doc_utils.c \
 		$(BLT)/env.c $(BLT)/unset.c main_utils/utils0.c \
@@ -17,7 +17,7 @@ FILES = minishell.c  $(PRC)/handle_quotes.c $(PRC)/utils/utils0.c\
 
 
 OBJCS = $(FILES:.c=.o)
-
+DIR2 = objectfiles
 INCLUDES = libft/libft.a get_next_line/get_next_line.a
 
 all : $(NAME)
@@ -28,6 +28,7 @@ $(NAME) : $(OBJCS)
 	@make -C get_next_line
 	@echo "\033[0;32mCompiling minishell..."
 	@$(CC)  $(OBJCS) -lreadline $(CFLAGS) $(LFLAGS) $(IFLAGS) $(INCLUDES) -o $(NAME)
+# @mv *.o builtins/*.o libft/*.o get_next_line/*.o parcing/*.o parcing/errors/*.o parcing/utils/*.o main_utils/utils0.o builtins/execution/*.o  objectfiles/
 	@echo "\n\x1b[34mDone !\033[0m"
 
 %.o:%.c
@@ -39,7 +40,7 @@ clean :
 	@make clean -C libft/
 	@make clean -C get_next_line/
 	@echo "\nRemoving binaries..."
-	@rm -fr $(OBJCS)
+	rm -fr $(OBJCS)
 	@echo "\033[0;31m𝑶𝒃𝒋𝒆𝒄𝒕𝒔' 𝒄𝒍𝒆𝒂𝒏𝒆𝒅\033[0m"
 	@echo "\033[0m"
 

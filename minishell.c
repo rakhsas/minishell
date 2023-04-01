@@ -6,39 +6,39 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 08:56:34 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/30 23:46:26 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/04/01 00:14:28 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-struct s_dependences dep;
+struct s_g_dependences g_dep;
 
-void	ft(int c)
-{
-	if (c == CMD)
-		printf("CMD ");
-	if (c == ARG)
-		printf("ARG ");
-	if (c == TRUNC)
-		printf("TRUNC ");
-	if (c == APPEND)
-		printf("APPEND ");
-	if (c == INPUT)
-		printf("INPUT ");
-	if (c == PIPE)
-		printf("PIPE ");
-	if (c == INFILE)
-		printf("INFILE ");
-	if (c == OUTFILE)
-		printf("OUTFILE ");
-	if (c == HERDOC)
-		printf("HERDOC ");
-	if (c == LIMITER)
-		printf("LIMITER ");
-}
+// void	ft(int c)
+// {
+// 	if (c == CMD)
+// 		printf("CMD ");
+// 	if (c == ARG)
+// 		printf("ARG ");
+// 	if (c == TRUNC)
+// 		printf("TRUNC ");
+// 	if (c == APPEND)
+// 		printf("APPEND ");
+// 	if (c == INPUT)
+// 		printf("INPUT ");
+// 	if (c == PIPE)
+// 		printf("PIPE ");
+// 	if (c == INFILE)
+// 		printf("INFILE ");
+// 	if (c == OUTFILE)
+// 		printf("OUTFILE ");
+// 	if (c == HERDOC)
+// 		printf("HERDOC ");
+// 	if (c == LIMITER)
+// 		printf("LIMITER ");
+// }
 
-//lesks checked : done
+//leaks checked : done
 void	expand_list(char **env, t_list **list)
 {
 	t_list	*tmp;
@@ -46,7 +46,7 @@ void	expand_list(char **env, t_list **list)
 
 	i = -1;
 	tmp = *list;
-	while(tmp)
+	while (tmp)
 	{
 		if (tmp->cmd)
 			tmp->cmd = ft_expand(env, tmp->cmd);
@@ -56,7 +56,9 @@ void	expand_list(char **env, t_list **list)
 			{
 				tmp->args[i] = ft_expand(env, tmp->args[i]);
 				if (!check_command(tmp->args[0]))
+				{
 					tmp->infile = -1;
+				}
 			}
 		}
 		i = -1;
@@ -115,21 +117,23 @@ void	ft_next(char *line, t_token *data, t_list *list)
 	{
 		ft_lstclear(&data);
 		return;
+		free(line);
+		return ;
 	}
 	get_cmd(&list, &data);
 	ft_lstclear(&data);
-	expand_list(dep.env, &list);
+	expand_list(g_dep.env, &list);
 	if (list)
 		ft_exec(list);
 	free_list(list);
-	free (line);
+	free(line);
 }
 
 char	**ft_help_env(char **env, int n)
 {
 	char	**new_env;
-	int	i;
-	int	j;
+	int		i;
+	int		j;
 
 	i = 0;
 	j = 0;
@@ -185,10 +189,10 @@ int	main(int ac, char **av, char **env)
 	char	*line;
 
 	data = malloc(sizeof(data));
-	dep.env = ft_help_env(env, checker(env));
-	dep.env_copy = ft_help_env(env, checker(env));
+	g_dep.env = ft_help_env(env, checker(env));
+	g_dep.env_copy = ft_help_env(env, checker(env));
 
-	dep.pwd = get_pwd("PWD=");
+	g_dep.pwd = get_pwd("PWD=");
 	list = NULL;
 	(void)ac;
 	(void)av;
@@ -202,7 +206,7 @@ int	main(int ac, char **av, char **env)
 			break ;
 		if (!check_cmd_syntax(line))
 		{
-			dep.exit_status = ERROR;
+			g_dep.exit_status = SYNTAX_ERROR;
 			add_history(line);
 			free(line);
 			continue ;

@@ -6,7 +6,7 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 13:52:44 by rakhsas           #+#    #+#             */
-/*   Updated: 2023/03/30 23:53:50 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/04/01 16:55:55 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,38 +19,34 @@ void	ft_next_main_exec(int *x, t_list *list)
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(list->args[0], 2);
 		ft_putstr_fd(": command not found\n", 2);
-		dep.exit_status = UNKNOWN_COMMAND;
-		exit(dep.exit_status);
+		g_dep.exit_status = UNKNOWN_COMMAND;
+		fprintf(stderr, "%d\n", g_dep.exit_status);
+		exit(g_dep.exit_status);
 	}
 }
 
-void	ft_main_execution(int i, t_list *list)
+void	ft_main_execution(t_list *list)
 {
-	int	x;
+	int x;
+	int i;
 
 	x = 0;
-	while (dep.staar[i++])
+	i = 0;
+	while (g_dep.staar[i++])
 	{
-		dep.staar[i] = ft_join_free(dep.staar[i], "/");
-		dep.staar[i] = ft_join_free(dep.staar[i], list->args[0]);
+
+		g_dep.staar[i] = ft_join_free(g_dep.staar[i], "/");
+		g_dep.staar[i] = ft_join_free(g_dep.staar[i], list->args[0]);
 	}
-	i = 1;
-	while (dep.staar[i++])
+	i = 0;
+	while (g_dep.staar[i++])
 	{
-		if (access(dep.staar[i], X_OK) == 0)
+		if (access(g_dep.staar[i], X_OK) == 0)
 		{
-			if (list->args[0][0] == '/')
+			if (execve(g_dep.staar[i], list->args, g_dep.env_copy) == -1)
 			{
-				x++;
-				ft_putstr_fd(list->args[0], 2);
-				ft_putstr_fd(": No such file or directory\n", 2);
-				dep.exit_status = UNKNOWN_COMMAND;
-				exit(dep.exit_status);
-			}
-			if (execve(dep.staar[i], list->args, dep.env_copy) == -1)
-			{
-				dep.exit_status = ERROR;
-				exit(dep.exit_status);
+				g_dep.exit_status = ERROR;
+				exit(g_dep.exit_status);
 			}
 		}
 	}
@@ -59,38 +55,25 @@ void	ft_main_execution(int i, t_list *list)
 
 void	do_exec(t_list *list)
 {
-	if(execve(list->args[0], list->args, dep.env_copy) == -1)
-		return ;
+	if (access(list->args[0], X_OK) == 0)
+		execve(list->args[0], list->args, g_dep.env_copy);
+	print_error("WORLD", "");
 	if (access(list->args[1], X_OK) == 0)
-		execve(list->args[1], list->args + 1, dep.env_copy);
+		execve(list->args[1], list->args + 1, g_dep.env_copy);
 }
 
 void	main_execution(t_list *list)
 {
-	int	i;
-
-	dep.str = get_arg();
-	// list->args = ft_split(list->args[0], ' ');
-	i = 1;
-	// if (list->args)
-	// {
-	// 	while (list->args[i])
-	// 	{
-	// 		list->args = ft_realloc(list->args, list->args[i]);
-	// 		i++;
-	// 	}
-	// 	i = 0;
-	// }
-	if (dep.str == NULL)
+	g_dep.str = get_arg();
+	if (g_dep.str == NULL)
 	{
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(list->args[1], 2);
 		ft_putstr_fd(": No such file or directory\n", 2);
-		dep.exit_status = ERROR;
-		exit(dep.exit_status);
+		g_dep.exit_status = ERROR;
+		exit(g_dep.exit_status);
 	}
-	dep.staar = ft_split(dep.str + 5, ':');
+	g_dep.staar = ft_split(g_dep.str + 5, ':');
 	do_exec(list);
-	while (1);
-	ft_main_execution(i, list);
+	ft_main_execution(list);
 }

@@ -6,7 +6,7 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 11:21:32 by rakhsas           #+#    #+#             */
-/*   Updated: 2023/03/30 23:50:42 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/04/01 16:49:47 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	check_if_builtin(t_list *list)
 	if (!ft_strcmp(list->args[0], "echo"))
 		echo(list);
 	else if (!ft_strcmp(list->args[0], "pwd"))
-		ft_putendl_fd(dep.pwd, list->outfile);
+		ft_putendl_fd(g_dep.pwd, list->outfile);
 	else if (!ft_strcmp(list->args[0], "exit"))
 		ft_exit(list);
 	else if (!ft_strcmp(list->args[0], "cd"))
@@ -44,11 +44,11 @@ char	*get_arg(void)
 
 	i = 0;
 	j = 0;
-	while (dep.env[i])
+	while (g_dep.env[i])
 	{
-		if (dep.env[i][j] == 'P' && dep.env[i][j + 4] == '=')
+		if (g_dep.env[i][j] == 'P' && g_dep.env[i][j + 4] == '=')
 		{
-			str = dep.env[i];
+			str = g_dep.env[i];
 			return (str);
 		}
 		i++;
@@ -60,13 +60,13 @@ void	ft_child_process(int pid, t_list *list, int *stdin, int *fd)
 {
 	if (pid == 0)
 	{
-		// signal(SIGINT, SIG_DFL);
-		// signal(SIGQUIT, SIG_DFL);
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		if (list->infile == -1)
 		{
 			close(fd[0]);
 			close(fd[1]);
-			exit(1);
+			// exit(127);
 		}
 		if (list->infile == 1)
 		{
@@ -87,7 +87,7 @@ void	ft_child_process(int pid, t_list *list, int *stdin, int *fd)
 		str_tolower(list->args[0]);
 		if (check_if_builtin(list) == 1)
 			main_execution(list);
-		exit(dep.exit_status);
+		exit(g_dep.exit_status);
 	}
 }
 
@@ -104,8 +104,8 @@ void	ft_loop(t_list *list, int *fd, int *stdin, int *pid)
 	if (pipe(fd) == -1)
 	{
 		perror("pipe");
-		dep.exit_status = ERROR;
-		exit(dep.exit_status);
+		g_dep.exit_status = ERROR;
+		exit(g_dep.exit_status);
 	}
 	*pid = fork();
 	ft_child_process(*pid, list, stdin, fd);
@@ -127,8 +127,9 @@ void	ft_next_exec(t_list *list)
 		list = list->next;
 	}
 	// close(fd[0])
-	waitpid(pid, &dep.exit_status, 0);
-	dep.exit_status = WEXITSTATUS(dep.exit_status);
+	waitpid(pid, &g_dep.exit_status, 0);
+	g_dep.exit_status = WEXITSTATUS(g_dep.exit_status);
+	// printf("%d\n", g_dep.exit_status);
 	close(0);
 	dup2(stdin, 0);
 	close(stdin);
@@ -138,26 +139,40 @@ void	ft_next_exec(t_list *list)
 
 void	ft_exec(t_list *list)
 {
+	int pid;
 	if (ft_listsize(list) == 1)
 	{
 		if (!list->args)
-		{
-			// dep.exit_status = 0;
 			return ;
-		}
 		str_tolower(list->args[0]);
 		if (check_if_builtin(list) == 1)
 		{
-			if (fork() == 0)
+			pid = fork();
+			if (pid == 0)
 			{
 				if (list->infile == -1 || list->outfile == -1)
+				{
+					if (access(list->args[0], R_OK) == -1)
+					{
+						ft_putstr_fd("minishell: ", 2);
+						ft_putstr_fd(list->args[0], 2);
+						ft_putstr_fd(": No such file or directory\n", 2);
+						g_dep.exit_status = UNKNOWN_COMMAND;
+						exit(g_dep.exit_status);
+					}
+					else
+						execve(list->args[0], list->args, g_dep.env);
 					exit(1);
+				}
 				if (list->outfile != 0)
 					dup2(list->outfile, 1);
 				if (list->infile != 0)
 					dup2(list->infile, 0);
 				main_execution(list);
 			}
+			waitpid(pid, &g_dep.exit_status, 0);
+			g_dep.exit_status = WEXITSTATUS(g_dep.exit_status);
+			// fprintf(stderr, "%d", g_dep.exit_status);
 			while (wait(NULL) != -1)
 				;
 		}

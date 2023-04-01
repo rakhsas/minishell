@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aankote <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: aankote <aankote@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 20:07:03 by aankote           #+#    #+#             */
-/*   Updated: 2022/11/14 20:07:05 by aankote          ###   ########.fr       */
+/*   Updated: 2023/03/31 01:35:54 by aankote          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *s)
+size_t	ft_strlen_n(const char *s)
 {
 	size_t	i;
 
@@ -24,7 +24,7 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-void	ft_bzero(void *s, size_t n)
+void	ft_bzero_o(void *s, size_t n)
 {
 	size_t	i;
 
@@ -36,7 +36,7 @@ void	ft_bzero(void *s, size_t n)
 	}
 }
 
-void	*ft_calloc(size_t count, size_t size)
+void	*ft_calloc_c(size_t count, size_t size)
 {
 	char	*ptr;
 
@@ -45,7 +45,7 @@ void	*ft_calloc(size_t count, size_t size)
 	ptr = (char *)malloc(count * size);
 	if (!ptr)
 		return (0);
-	ft_bzero(ptr, count * size);
+	ft_bzero_o(ptr, count * size);
 	return (ptr);
 }
 
@@ -55,8 +55,8 @@ char	*ft_strchr(const char *s, int c)
 
 	i = 0;
 	if ((char)c == 0)
-		return ((char *)s + ft_strlen(s));
-	while (i < ft_strlen(s))
+		return ((char *)s + ft_strlen_n(s));
+	while (i < ft_strlen_n(s))
 	{
 		if (s[i] == (char)c)
 			return ((char *)s + i);
@@ -65,7 +65,7 @@ char	*ft_strchr(const char *s, int c)
 	return (0);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin_n(char const *s1, char const *s2)
 {
 	int		i;
 	int		j;
@@ -76,7 +76,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	j = 0;
 	if (!s1)
 		return (0);
-	total_size = ft_strlen(s1) + ft_strlen(s2);
+	total_size = ft_strlen_n(s1) + ft_strlen_n(s2);
 	newstr = malloc(sizeof(char) * (total_size + 1));
 	if (!newstr)
 		return (0);

@@ -43,7 +43,7 @@ int	check_quotes(char *str)
 		else if (str[i] == '\'' && check == 1)
 			check_quotes_util(str, &check, &i);
 	}
-	if(!check)
+	if (!check)
 		printf("Syntax Error!\n");
 	return (check);
 }

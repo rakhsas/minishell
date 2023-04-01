@@ -6,7 +6,7 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 15:12:01 by rakhsas           #+#    #+#             */
-/*   Updated: 2023/03/30 14:26:15 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/31 11:22:31 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,16 @@ void	ft_next_next_export(t_list *list, int *k, int *help)
 	int		j;
 
 	j = 0;
-	while (dep.env[j])
+	while (g_dep.env[j])
 	{
 		str = ft_search(list->args[*k], '=');
-		if (ft_strnstr(dep.env[j], str, ft_strlen(list->args[*k])))
+		if (ft_strnstr(g_dep.env[j], str, ft_strlen(list->args[*k])))
 		{
 			*help = 1;
-			free(dep.env[j]);
-			dep.env[j] = ft_strdup(list->args[*k]);
-			free(dep.env_copy[j]);
-			dep.env_copy[j] = ft_strdup(list->args[*k]);
+			free(g_dep.env[j]);
+			g_dep.env[j] = ft_strdup(list->args[*k]);
+			free(g_dep.env_copy[j]);
+			g_dep.env_copy[j] = ft_strdup(list->args[*k]);
 			j++;
 			k[0]++;
 			// free(str);
@@ -72,8 +72,8 @@ void	ft_next_next(t_list *list)
 		k = 1;
 		while (k < i)
 		{
-			dep.env_copy = ft_realloc(dep.env_copy, list->args[k]);
-			dep.env = ft_realloc(dep.env, list->args[k]);
+			g_dep.env_copy = ft_realloc(g_dep.env_copy, list->args[k]);
+			g_dep.env = ft_realloc(g_dep.env, list->args[k]);
 			k++;
 		}
 	}
@@ -108,12 +108,12 @@ void	ft_export(t_list *list)
 	i = 0;
 	if (!list->args[1])
 	{
-		if (dep.env_copy)
+		if (g_dep.env_copy)
 		{
-			while (dep.env_copy[i])
+			while (g_dep.env_copy[i])
 			{
 				ft_putstr_fd("declare -x ", 1);
-				print_test(dep.env_copy[i]);
+				print_test(g_dep.env_copy[i]);
 				ft_putstr_fd("\n", 1);
 				i++;
 			}

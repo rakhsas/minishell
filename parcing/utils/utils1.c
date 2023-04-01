@@ -6,14 +6,13 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 19:50:15 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/30 18:36:25 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/04/01 14:40:04 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../../minishell.h"
 
-int		quotes(char *line, int index)
+int	quotes(char *line, int index)
 {
 	int	i;
 	int	open;
@@ -35,49 +34,41 @@ int		quotes(char *line, int index)
 	return (open);
 }
 
-char *ft_join_free(char *s1, char *s2)
+char	**ft_realloc(char **p, char *str)
 {
-	char *tmp;
-
-	tmp = ft_strjoin(s1, s2);
-	return(free(s1), tmp);
-}
-
-char **ft_realloc(char **p, char *str)
-{
-	int i;
-	char **rp;
+	int		i;
+	char	**rp;
 
 	i = 0;
-	while(p && p[i])
+	while (p && p[i])
 		i++;
 	rp = (char **)malloc(sizeof(char *) * (i + 2));
 	i = 0;
-	while(p && p[i])
+	while (p && p[i])
 	{
 		rp[i] = ft_calloc(1, 1);
 		rp[i] = ft_join_free(rp[i], p[i]);
 		i++;
 	}
 	rp[i] = ft_calloc(1, 1);
-	rp[i] = ft_join_free(rp[i], str);
+	rp[i] = ft_strjoin(rp[i], str);
 	i++;
 	rp[i] = NULL;
 	free_double(p);
-	return(rp);
+	return (rp);
 }
 
-char *ft_charjoin(char *s, char c)
+char	*ft_charjoin(char *s, char c)
 {
-	char *p;
-	int i;
+	char	*p;
+	int		i;
 
 	i = 0;
 	p = malloc(ft_strlen(s) + 2);
-	while(s[i])
+	while (s[i])
 	{
 		p[i] = s[i];
-		i ++;
+		i++;
 	}
 	p[i++] = c;
 	p[i] = 0;
@@ -99,31 +90,21 @@ int	ft_strcmp(const char *s1, const char *s2)
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
 
-void free_double(char **p)
+char	*ft_trim(char *arg)
 {
-	int i;
-
-	i = 0;
-	while(p && p[i])
-		free(p[i++]);
-	free(p);
-}
-
-char *ft_trim(char *arg)
-{
-	int i;
-	char *p;
+	int		i;
+	char	*p;
 
 	i = -1;
 	p = ft_strdup("");
-	while(arg[++i])
+	while (arg[++i])
 	{
-		 if((arg[i] != '\'' && arg[i] != '\"'))
-			p = ft_charjoin(p,arg[i]);
-		if(arg[i] == '\'' && quotes(arg, i) == 1)
-			p = ft_charjoin(p,arg[i]);
-		if(arg[i] == '\"' && quotes(arg, i) == 2)
-			p = ft_charjoin(p,arg[i]);
+		if ((arg[i] != '\'' && arg[i] != '\"'))
+			p = ft_charjoin(p, arg[i]);
+		if (arg[i] == '\'' && quotes(arg, i) == 1)
+			p = ft_charjoin(p, arg[i]);
+		if (arg[i] == '\"' && quotes(arg, i) == 2)
+			p = ft_charjoin(p, arg[i]);
 	}
-	return(p);
+	return (p);
 }

@@ -6,7 +6,7 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 23:13:46 by rakhsas           #+#    #+#             */
-/*   Updated: 2023/03/30 23:47:55 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/31 11:17:56 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,12 @@
 // 	free(p);
 // }
 
-int yy(char *targ, int *n)
+int check_n(char *targ, int *n)
 {
 	int j;
 
 	j = 0;
-	while(targ[++j])
+	while (targ[++j])
 	{
 		if(targ[j] != 'n')
 		{
@@ -36,6 +36,7 @@ int yy(char *targ, int *n)
 	}
 	return (1);
 }
+
 void	check_args(t_list *list, int *i, int *n)
 {
 	char	*targ;
@@ -48,7 +49,7 @@ void	check_args(t_list *list, int *i, int *n)
 		if (!ft_strncmp(targ, "-n", 2))
 		{
 			*n = 1;
-			if(!yy(targ, n))
+			if(!check_n(targ, n))
 				break;
 		}
 		else

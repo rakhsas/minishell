@@ -6,7 +6,7 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 10:50:47 by aankote           #+#    #+#             */
-/*   Updated: 2023/03/30 22:24:57 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/03/31 10:55:09 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 //stoped here
 
-void get_list(t_token *tmp, t_list **tmp_list)
+void	get_list(t_token *tmp, t_list **tmp_list)
 {
 	if (tmp->type == ARG || tmp->type == CMD)
 		(*tmp_list)->args = ft_realloc((*tmp_list)->args, tmp->val);
@@ -36,12 +36,12 @@ void	get_cmd(t_list **list, t_token **token)
 	tmp = *token;
 	tmp_list = (t_list *)malloc(sizeof(t_list));
 	list_init(tmp_list);
-	open_her(token, dep.env);
+	open_her(token, g_dep.env);
 	while (tmp)
 	{
 		type_arg(tmp);
 		if (tmp->type == ARG || tmp->type == CMD)
-		(tmp_list)->args = ft_realloc((tmp_list)->args, tmp->val);
+			(tmp_list)->args = ft_realloc((tmp_list)->args, tmp->val);
 		else if (tmp->type == INFILE)
 			get_infile(tmp_list, tmp->val);
 		else if (tmp->type == OUTFILE)
@@ -57,8 +57,7 @@ void	get_cmd(t_list **list, t_token **token)
 	free(tmp_list);
 }
 
-
-void	 type_arg(t_token *token)
+void	type_arg(t_token *token)
 {
 	if (ft_strcmp(token->val, ">") == 0)
 		token->type = TRUNC;
@@ -87,7 +86,7 @@ void	 type_arg(t_token *token)
 //leaks visited : done
 void	get_token(char *line, t_token **token)
 {
-	int		i;
+	int	i;
 
 	*token = NULL;
 	i = -1;
@@ -96,10 +95,11 @@ void	get_token(char *line, t_token **token)
 		if (line[i] && !ignore_sep(line[i], line, i))
 			ft_add_str(line, token, &i);
 		if (line[i] && ignore_sep(line[i], line, i))
-				ft_add_opr(line, token, &i);
+			ft_add_opr(line, token, &i);
 	}
 }
 //stoped here
+
 int	tokens(char *line, t_token **token)
 {
 	t_token	*tmp;
@@ -109,14 +109,14 @@ int	tokens(char *line, t_token **token)
 	while (tmp)
 	{
 		type_arg(tmp);
-		if(tmp->type == INFILE || tmp->type == OUTFILE)
-			tmp->val = ft_expand(dep.env, tmp->val);
+		if (tmp->type == INFILE || tmp->type == OUTFILE)
+			tmp->val = ft_expand(g_dep.env, tmp->val);
 		tmp = tmp->next;
 	}
 	if(!check_token_syntax(token))
 	{
-		return(SYNTAX_ERROR);
-		dep.exit_status  = SYNTAX_ERROR;
+		return (SYNTAX_ERROR);
+		g_dep.exit_status = SYNTAX_ERROR;
 	}
-	return(1);
+	return (1);
 }
