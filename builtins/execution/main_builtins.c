@@ -6,7 +6,7 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 13:52:44 by rakhsas           #+#    #+#             */
-/*   Updated: 2023/04/01 16:55:55 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/04/01 17:03:19 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	ft_next_main_exec(int *x, t_list *list)
 		ft_putstr_fd(list->args[0], 2);
 		ft_putstr_fd(": command not found\n", 2);
 		g_dep.exit_status = UNKNOWN_COMMAND;
-		fprintf(stderr, "%d\n", g_dep.exit_status);
 		exit(g_dep.exit_status);
 	}
 }
@@ -57,7 +56,6 @@ void	do_exec(t_list *list)
 {
 	if (access(list->args[0], X_OK) == 0)
 		execve(list->args[0], list->args, g_dep.env_copy);
-	print_error("WORLD", "");
 	if (access(list->args[1], X_OK) == 0)
 		execve(list->args[1], list->args + 1, g_dep.env_copy);
 }

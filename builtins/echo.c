@@ -6,7 +6,7 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 23:13:46 by rakhsas           #+#    #+#             */
-/*   Updated: 2023/03/31 11:17:56 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/04/01 23:12:04 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,4 +81,5 @@ void	echo(t_list *list)
 	}
 	if (!n || !list->args[0])
 		ft_putstr_fd("\n", list->outfile);
+	g_dep.exit_status = 0;
 }
