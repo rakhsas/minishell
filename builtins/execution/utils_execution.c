@@ -6,7 +6,7 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 11:21:32 by rakhsas           #+#    #+#             */
-/*   Updated: 2023/04/01 17:17:12 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/04/02 13:42:13 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,6 +148,7 @@ void	ft_exec(t_list *list)
 		if (check_if_builtin(list) == 1)
 		{
 			pid = fork();
+			signal(SIGINT, SIG_IGN);
 			if (pid == 0)
 			{
 				signal(SIGINT, SIG_DFL);

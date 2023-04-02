@@ -6,7 +6,7 @@
 /*   By: rakhsas <rakhsas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 09:46:24 by aankote           #+#    #+#             */
-/*   Updated: 2023/04/01 00:33:16 by rakhsas          ###   ########.fr       */
+/*   Updated: 2023/04/02 13:40:41 by rakhsas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ char	*here_doc(char *limiter, char **env)
 	name = check_name();
 	fd = open(name, O_TRUNC | O_CREAT | O_RDWR, 0777);
 	pid = fork();
+	signal(SIGINT, SIG_IGN);
 	if (!pid)
 	{
 		signal(SIGINT, handle_signal);
